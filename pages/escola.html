@@ -5,10 +5,8 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Professor</title>
+  <title>Escola</title>
   <!-- 追加：外部のスタイルシート -->
-  <!-- <link rel="stylesheet" href="styles/professores.css" /> -->
-  <!-- <link rel="stylesheet" href="styles/style.css" /> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/bootstrap.css">
@@ -94,25 +92,19 @@
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
 
   <div class="container">
-    <h1>Lista do professores</h1>
+    <h1>Lista de escola</h1>
 
     <div class="containerTable" style="overflow-y: auto; max-height: 400px;">
       <table class="table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nome</th>
-            <th>Email Constitucional</th>
-            <th>CPF</th>
-            <th>Matéria Lecionada</th>
-            <th>Telefone</th>
-            <th>Data de Nascimento</th>
-            <th>Email Pessoal</th>
-            <th>Endereço Completo</th>
+            <th>Nome da escola</th>
+            <th>Email</th>
             <th>Option</th>
           </tr>
         </thead>
-        <tbody id="professoresList" class="overflow-auto">
+        <tbody id="escolaList" class="overflow-auto">
           <!-- データはここに挿入されます -->
         </tbody>
       </table>
@@ -122,33 +114,15 @@
 
     <!-- 入力欄 -->
     <div class="row">
-      <!-- Professorの追加 -->
+      <!-- Escolaの追加 -->
       <div class="col-md-6">
-        <h2>Cadastrar novo professor</h2>
-        <form id="addProfessorForm">
+        <h2>Cadastrar novo escola</h2>
+        <form id="addEscolaForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="professorName" placeholder="Nome do professor" required>
+            <input type="text" class="form-control" id="escolaName" placeholder="Nome do escola" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="professorEmail" placeholder="Email Constitucional" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorCPF" placeholder="CPF" maxlength="14" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorSubject" placeholder="Matéria Lecionada" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorPhone" placeholder="Telefone" maxlength="20" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorBirthdate" placeholder="Data de Nascimento" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorPersonalEmail" placeholder="Email Pessoal" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorAddress" placeholder="Endereço Completo" required>
+            <input type="text" class="form-control" id="escolaEmail" placeholder="Email Constitucional" required>
           </div>
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
@@ -157,36 +131,15 @@
       <!-- Professorの編集 -->
       <div class="col-md-6">
         <h2>Editar</h2>
-        <form id="updateProfessorForm">
+        <form id="updateEscolaForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorId" placeholder="ID do professor" required disabled>
+            <input type="text" class="form-control" id="editEscolaId" placeholder="ID do professor" required disabled>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorName" placeholder="Nome do professor" required>
+            <input type="text" class="form-control" id="editEscolaName" placeholder="Nome do professor" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorEmail" placeholder="Email Constitucional" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorCPF" placeholder="CPF" maxlength="14" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorSubject" placeholder="Matéria Lecionada" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorPhone" placeholder="Telefone" maxlength="20"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorBirthdate" placeholder="Data de Nascimento"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorPersonalEmail" placeholder="Email Pessoal"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorAddress" placeholder="Endereço Completo" required>
+            <input type="text" class="form-control" id="editEscolaEmail" placeholder="Email Constitucional" required>
           </div>
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>
@@ -194,20 +147,20 @@
       </div>
 
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-      crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Bootstrap Datepicker JS -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Bootstrap Datepicker JS -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-    <script src="../scripts/professor.js">
-    </script>
+  <script src="../js/escola.js"></script>
 </body>
 
 </html>
