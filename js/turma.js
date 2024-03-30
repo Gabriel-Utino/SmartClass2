@@ -105,3 +105,7 @@ function deleteTurma(id_turma) {
 }
 
 getTurma();
+
+function cancelEdit() {
+  document.getElementById('updateTurmaForm').reset()
+}
