@@ -99,3 +99,8 @@ function deleteDisciplina(id_disciplina) {
 }
 
 getDisciplina();
+
+// 編集キャンセル
+function cancelEdit() {
+  document.getElementById('updateDisciplinaForm').reset();
+}

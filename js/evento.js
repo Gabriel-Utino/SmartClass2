@@ -1,86 +1,105 @@
-// Eventテーブルのデータ取得
-connection.query('SELECT * FROM Evento;', (err, results) => {
-  if (err) {
-    console.error('Eventテーブルでエラー発生: ' + err)
-  } else {
-    eventos = results
-  }
-})
+const apiUrl = 'http://localhost:3000/eventos';
 
-// リスト化
-app.get('/eventos', (req, res) => {
-  res.json(eventos)
-})
+function displayEvento(evento) {
+  const eventoList = document.getElementById('eventoList');
+  eventoList.innerHTML = '';
+  evento.forEach(evento => {
+    const eventoElement = document.createElement('tr');
+    eventoElement.innerHTML = `
+              <td>${evento.id_evento}</td>
+              <td>${evento.nome_evento}</td>
+              <td>${evento.link_evento}</td>
+              <td>${evento.date_evento}</td>
+              <td>
+                <button onclick="updateEvento(${evento.id_evento})">Editar</button>
+                <button onclick="deleteEvento(${evento.id_evento})">Excluir</button>
+              </td>
+          `;
+    eventoList.appendChild(eventoElement);
+  });
+}
 
-// 取得
-app.get('/eventos/:id_evento', (req, res) => {
-  const eventoID = parseInt(req.params.id_evento)
-  const evento = eventos.find((evento) => evento.id_evento === eventoID)
-  if (evento) {
-    res.json(evento)
-  } else {
-    res.status(404).json({ message: '見つかりません' })
-  }
-})
+function getEventos() {
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => displayEvento(data))
+    .catch(error => console.error('Erro:', error));
+}
 
-// 追加
-app.post('/eventos', (req, res) => {
-  const newEvento = req.body
-  connection.query(
-    'INSERT INTO Evento (nome_evento, link_evento, date_evento) VALUES (?, ?, ?)',
-    [newEvento.nome_evento, newEvento.link_evento, newEvento.date_evento],
-    (err, result) => {
-      if (err) {
-        console.error('MySQLへのデータ追加エラー: ' + err)
-        res.status(500).json({ message: 'Eventを追加できませんでした' })
-      } else {
-        newEvento.id_evento = result.insertId
-        eventos.push(newEvento)
-        res.status(201).json(newEvento)
-      }
-    }
-  )
-})
+document.getElementById('addEventoForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const eventoNome = document.getElementById('eventoNome').value;
+  const eventoLink = document.getElementById('eventoLink').value;
+  const eventoDate = document.getElementById('eventoDate').value;
 
-// 更新
-app.put("/eventos/:id_evento", (req, res) => {
-  const id_evento = parseInt(req.params.id_evento)
-  const updatedEvento = req.body
-  const index = eventos.findIndex((evento) => evento.id_evento === id_evento)
-  if (index !== -1) {
-    connection.query(
-      "UPDATE Evento SET nome_evento=?, link_evento=?, date_evento=? WHERE id_evento=?",
-      [updatedEvento.nome_evento, updatedEvento.link_evento, updatedEvento.date_evento, id_evento],
-      (err) => {
-        if (err) {
-          console.error("MySQLでデータ更新エラー: " + err)
-          res.status(500).json({ message: "Eventを更新できませんでした" })
-        } else {
-          eventos[index] = { ...eventos[index], ...updatedEvento }
-          res.json(eventos[index])
-        }
-      }
-    )
-  } else {
-    res.status(404).json({ message: "Eventが見つかりません" })
-  }
-})
-
-// 削除
-app.delete('/eventos/:id_evento', (req, res) => {
-  const id_evento = parseInt(req.params.id_evento)
-  const index = eventos.findIndex(evento => evento.id_evento === id_evento)
-  if (index !== -1) {
-    connection.query('DELETE FROM Evento WHERE id_evento=?', [id_evento], err => {
-      if (err) {
-        console.error('MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
-      } else {
-        const removedEvento = eventos.splice(index, 1)
-        res.json(removedEvento[0])
-      }
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nome_evento: eventoNome,
+      link_evento: eventoLink,
+      date_evento: eventoDate
     })
-  } else {
-    res.status(404).json({ message: '見つかりませんでした' })
-  }
-})
+  })
+    .then(response => response.json())
+    .then(data => {
+      getEventos();
+      document.getElementById('addEventoForm').reset();
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+function updateEvento(id) {
+  fetch(`${apiUrl}/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('editEventoId').value = data.id_evento;
+      document.getElementById('editEventoNome').value = data.nome_evento;
+      document.getElementById('editEventoLink').value = data.link_evento;
+      document.getElementById('editEventoDate').value = data.date_evento;
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+document.getElementById('updateEventoForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const eventoId = document.getElementById('editEventoId').value;
+  const eventoNome = document.getElementById('editEventoNome').value;
+  const eventoLink = document.getElementById('editEventoLink').value;
+  const eventoDate = document.getElementById('editEventoDate').value;
+
+  fetch(`${apiUrl}/${eventoId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nome_evento: eventoNome,
+      link_evento: eventoLink,
+      date_evento: eventoDate
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      getEventos();
+      document.getElementById('editEventoForm').style.display = 'none';
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+function deleteEvento(id) {
+  fetch(`${apiUrl}/${id}`, {
+    method: 'DELETE'
+  })
+    .then(response => response.json())
+    .then(data => getEventos())
+    .catch(error => console.error('Erro:', error));
+}
+
+getEventos();
+
+function cancelEdit() {
+  document.getElementById('updateEventoForm').reset();
+}

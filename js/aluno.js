@@ -135,3 +135,8 @@ function deleteAluno(id_aluno) {
 }
 
 getAluno();
+
+// 編集キャンセル
+function cancelEdit() {
+  document.getElementById('updateAlunoForm').reset();
+}

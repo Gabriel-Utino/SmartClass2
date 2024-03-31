@@ -29,6 +29,7 @@ let disciplinas = []
 let professores = []
 let notas = []
 let responsaveis = []
+let turmaAlunos = []
 
 
 // Escolaのサーバー管理に関わる部分
@@ -725,7 +726,7 @@ app.post('/turma_alunos', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'Turma_Alunoを追加できませんでした' })
       } else {
-        newTurmaAluno.id_aluno = result.insertId
+        /* newTurmaAluno.id_aluno = result.insertId */
         turmaAlunos.push(newTurmaAluno)
         res.status(201).json(newTurmaAluno)
       }
@@ -751,6 +752,8 @@ app.delete('/turma_alunos/:id_aluno/:id_turma', (req, res) => {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
+
+
 
 
 
