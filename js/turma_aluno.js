@@ -30,8 +30,8 @@ document.getElementById('addTurmaAlunoForm').addEventListener('submit', function
   event.preventDefault();
   const id_aluno1 = document.getElementById('alunoId').value;
   id_aluno = parseInt(id_aluno1)
-  const id_turma2 = document.getElementById('turmaId').value;
-  id_turma = parseInt(id_turma2)
+  const id_turma1 = document.getElementById('turmaId').value;
+  id_turma = parseInt(id_turma1)
 
   fetch(apiUrlTurmaAlunos, {
     method: 'POST',

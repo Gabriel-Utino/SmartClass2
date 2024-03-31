@@ -1,64 +1,60 @@
-// evento_professorテーブルのデータ取得
-connection.query('SELECT * FROM evento_professor;', (err, results) => {
-  if (err) {
-    console.error('evento_professorテーブルでエラー発生: ' + err)
-  } else {
-    eventoProfessors = results
-  }
-})
+const apiUrl = 'http://localhost:3000/evento_professors';
 
-// リスト化
-app.get('/evento_professors', (req, res) => {
-  res.json(eventoProfessors)
-})
+function displayEventoProfessor(eventoProfessor) {
+  const eventoProfessorList = document.getElementById('eventoProfessorList');
+  eventoProfessorList.innerHTML = '';
+  eventoProfessor.forEach(eventoProfessor => {
+    const eventoProfessorElement = document.createElement('tr');
+    eventoProfessorElement.innerHTML = `
+              <td>${eventoProfessor.id_prof}</td>
+              <td>${eventoProfessor.id_evento}</td>
+              <td>
+                <button onclick="deleteEventoProfessor(${eventoProfessor.id_prof}, ${eventoProfessor.id_evento})">Excluir</button>
+              </td>
+          `;
+    eventoProfessorList.appendChild(eventoProfessorElement);
+  });
+}
 
-// 取得
-app.get('/evento_professors/:id_prof/:id_evento', (req, res) => {
-  const professorID = parseInt(req.params.id_prof)
-  const eventoID = parseInt(req.params.id_evento)
-  const eventoProfessor = eventoProfessors.find((eventoProfessor) => eventoProfessor.id_prof === professorID && eventoProfessor.id_evento === eventoID)
-  if (eventoProfessor) {
-    res.json(eventoProfessor)
-  } else {
-    res.status(404).json({ message: '見つかりません' })
-  }
-})
+function getEventoProfessors() {
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => displayEventoProfessor(data))
+    .catch(error => console.error('Erro:', error));
+}
 
-// 追加
-app.post('/evento_professors', (req, res) => {
-  const newEventoProfessor = req.body
-  connection.query(
-    'INSERT INTO evento_professor (id_prof, id_evento) VALUES (?, ?)',
-    [newEventoProfessor.id_prof, newEventoProfessor.id_evento],
-    (err, result) => {
-      if (err) {
-        console.error('MySQLへのデータ追加エラー: ' + err)
-        res.status(500).json({ message: 'evento_professorを追加できませんでした' })
-      } else {
-        newEventoProfessor.id_prof = result.insertId
-        eventoProfessors.push(newEventoProfessor)
-        res.status(201).json(newEventoProfessor)
-      }
-    }
-  )
-})
+document.getElementById('addEventoProfessorForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const professorId = document.getElementById('eventoProfessorProfessorId').value;
+  const id_prof = parseInt(professorId)
+  const eventoId = document.getElementById('eventoProfessorEventoId').value;
+  const id_evento = parseInt(eventoId)
 
-// 削除
-app.delete('/evento_professors/:id_prof/:id_evento', (req, res) => {
-  const professorID = parseInt(req.params.id_prof)
-  const eventoID = parseInt(req.params.id_evento)
-  const index = eventoProfessors.findIndex(eventoProfessor => eventoProfessor.id_prof === professorID && eventoProfessor.id_evento === eventoID)
-  if (index !== -1) {
-    connection.query('DELETE FROM evento_professor WHERE id_prof=? AND id_evento=?', [professorID, eventoID], err => {
-      if (err) {
-        console.error('evento_professorテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
-      } else {
-        const removedEventoProfessor = eventoProfessors.splice(index, 1)
-        res.json(removedEventoProfessor[0])
-      }
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id_prof: id_prof,
+      id_evento: id_evento
     })
-  } else {
-    res.status(404).json({ message: '見つかりませんでした' })
-  }
-})
+  })
+    .then(response => response.json())
+    .then(data => {
+      getEventoProfessors();
+      document.getElementById('addEventoProfessorForm').reset();
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+function deleteEventoProfessor(professorId, eventoId) {
+  fetch(`${apiUrl}/${professorId}/${eventoId}`, {
+    method: 'DELETE'
+  })
+    .then(response => response.json())
+    .then(data => getEventoProfessors())
+    .catch(error => console.error('Erro:', error));
+}
+
+getEventoProfessors();
