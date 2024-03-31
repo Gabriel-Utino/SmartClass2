@@ -28,8 +28,10 @@ function getTurmaAlunos() {
 // 追加
 document.getElementById('addTurmaAlunoForm').addEventListener('submit', function (event) {
   event.preventDefault();
-  const id_aluno = document.getElementById('alunoId').value;
-  const id_turma = document.getElementById('turmaId').value;
+  const id_aluno1 = document.getElementById('alunoId').value;
+  id_aluno = parseInt(id_aluno1)
+  const id_turma1 = document.getElementById('turmaId').value;
+  id_turma = parseInt(id_turma1)
 
   fetch(apiUrlTurmaAlunos, {
     method: 'POST',

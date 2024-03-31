@@ -1,10 +1,9 @@
-const apiUrlNotas = 'http://localhost:3000/notas';
+const apiUrl = 'http://localhost:3000/notas';
 
-// リストを表示
-function displayNotas(notas) {
-  const notasList = document.getElementById('notasList');
-  notasList.innerHTML = '';
-  notas.forEach(nota => {
+function displayNota(nota) {
+  const notaList = document.getElementById('notaList');
+  notaList.innerHTML = '';
+  nota.forEach(nota => {
     const notaElement = document.createElement('tr');
     notaElement.innerHTML = `
               <td>${nota.id_notas}</td>
@@ -16,45 +15,44 @@ function displayNotas(notas) {
               <td>${nota.faltas}</td>
               <td>${nota.periodo_letivo}</td>
               <td>
+                <button onclick="updateNota(${nota.id_notas})">Editar</button>
                 <button onclick="deleteNota(${nota.id_notas})">Excluir</button>
               </td>
           `;
-    notasList.appendChild(notaElement);
+    notaList.appendChild(notaElement);
   });
 }
 
-// 取得
 function getNotas() {
-  fetch(apiUrlNotas)
+  fetch(apiUrl)
     .then(response => response.json())
-    .then(data => displayNotas(data))
+    .then(data => displayNota(data))
     .catch(error => console.error('Erro:', error));
 }
 
-// 追加
-document.getElementById('addNotaForm').addEventListener('submit', function (event) {
+document.getElementById('addNotaForm').addEventListener('submit', function(event) {
   event.preventDefault();
-  const id_aluno = document.getElementById('alunoId').value;
-  const id_disciplina = document.getElementById('disciplinaId').value;
-  const n1 = document.getElementById('n1').value;
-  const AI = document.getElementById('AI').value;
-  const AP = document.getElementById('AP').value;
-  const faltas = document.getElementById('faltas').value;
-  const periodo_letivo = document.getElementById('periodo_letivo').value;
+  const alunoId = document.getElementById('notaAlunoId').value;
+  const disciplinaId = document.getElementById('notaDisciplinaId').value;
+  const n1 = document.getElementById('notaN1').value;
+  const AI = document.getElementById('notaAI').value;
+  const AP = document.getElementById('notaAP').value;
+  const faltas = document.getElementById('notaFaltas').value;
+  const periodoLetivo = document.getElementById('notaPeriodoLetivo').value;
 
-  fetch(apiUrlNotas, {
+  fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      id_aluno: id_aluno,
-      id_disciplina: id_disciplina,
+      id_aluno: alunoId,
+      id_disciplina: disciplinaId,
       n1: n1,
       AI: AI,
       AP: AP,
       faltas: faltas,
-      periodo_letivo: periodo_letivo
+      periodo_letivo: periodoLetivo
     })
   })
     .then(response => response.json())
@@ -65,9 +63,58 @@ document.getElementById('addNotaForm').addEventListener('submit', function (even
     .catch(error => console.error('Erro:', error));
 });
 
-// 削除
-function deleteNota(id_notas) {
-  fetch(`${apiUrlNotas}/${id_notas}`, {
+function updateNota(id) {
+  fetch(`${apiUrl}/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('editNotaId').value = data.id_notas;
+      document.getElementById('editNotaAlunoId').value = data.id_aluno;
+      document.getElementById('editNotaDisciplinaId').value = data.id_disciplina;
+      document.getElementById('editNotaN1').value = data.n1;
+      document.getElementById('editNotaAI').value = data.AI;
+      document.getElementById('editNotaAP').value = data.AP;
+      document.getElementById('editNotaFaltas').value = data.faltas;
+      document.getElementById('editNotaPeriodoLetivo').value = data.periodo_letivo;
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+document.getElementById('updateNotaForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const notaId = document.getElementById('editNotaId').value;
+  const alunoId = document.getElementById('editNotaAlunoId').value;
+  const disciplinaId = document.getElementById('editNotaDisciplinaId').value;
+  const n1 = document.getElementById('editNotaN1').value;
+  const AI = document.getElementById('editNotaAI').value;
+  const AP = document.getElementById('editNotaAP').value;
+  const faltas = document.getElementById('editNotaFaltas').value;
+  const periodoLetivo = document.getElementById('editNotaPeriodoLetivo').value;
+
+  fetch(`${apiUrl}/${notaId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id_aluno: alunoId,
+      id_disciplina: disciplinaId,
+      n1: n1,
+      AI: AI,
+      AP: AP,
+      faltas: faltas,
+      periodo_letivo: periodoLetivo
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      getNotas();
+      document.getElementById('editNotaForm').style.display = 'none';
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+function deleteNota(id) {
+  fetch(`${apiUrl}/${id}`, {
     method: 'DELETE'
   })
     .then(response => response.json())
@@ -76,3 +123,7 @@ function deleteNota(id_notas) {
 }
 
 getNotas();
+
+function cancelEdit() {
+  document.getElementById('updateNotaForm').reset();
+}

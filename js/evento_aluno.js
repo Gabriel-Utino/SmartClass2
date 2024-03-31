@@ -1,64 +1,60 @@
-// evento_alunoテーブルのデータ取得
-connection.query('SELECT * FROM evento_aluno;', (err, results) => {
-  if (err) {
-    console.error('evento_alunoテーブルでエラー発生: ' + err)
-  } else {
-    eventoAlunos = results
-  }
-})
+const apiUrl = 'http://localhost:3000/evento_alunos';
 
-// リスト化
-app.get('/evento_alunos', (req, res) => {
-  res.json(eventoAlunos)
-})
+function displayEventoAluno(eventoAluno) {
+  const eventoAlunoList = document.getElementById('eventoAlunoList');
+  eventoAlunoList.innerHTML = '';
+  eventoAluno.forEach(eventoAluno => {
+    const eventoAlunoElement = document.createElement('tr');
+    eventoAlunoElement.innerHTML = `
+              <td>${eventoAluno.id_aluno}</td>
+              <td>${eventoAluno.id_evento}</td>
+              <td>
+                <button onclick="deleteEventoAluno(${eventoAluno.id_aluno}, ${eventoAluno.id_evento})">Excluir</button>
+              </td>
+          `;
+    eventoAlunoList.appendChild(eventoAlunoElement);
+  });
+}
 
-// 取得
-app.get('/evento_alunos/:id_aluno/:id_evento', (req, res) => {
-  const alunoID = parseInt(req.params.id_aluno)
-  const eventoID = parseInt(req.params.id_evento)
-  const eventoAluno = eventoAlunos.find((eventoAluno) => eventoAluno.id_aluno === alunoID && eventoAluno.id_evento === eventoID)
-  if (eventoAluno) {
-    res.json(eventoAluno)
-  } else {
-    res.status(404).json({ message: '見つかりません' })
-  }
-})
+function getEventoAlunos() {
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => displayEventoAluno(data))
+    .catch(error => console.error('Erro:', error));
+}
 
-// 追加
-app.post('/evento_alunos', (req, res) => {
-  const newEventoAluno = req.body
-  connection.query(
-    'INSERT INTO evento_aluno (id_aluno, id_evento) VALUES (?, ?)',
-    [newEventoAluno.id_aluno, newEventoAluno.id_evento],
-    (err, result) => {
-      if (err) {
-        console.error('MySQLへのデータ追加エラー: ' + err)
-        res.status(500).json({ message: 'evento_alunoを追加できませんでした' })
-      } else {
-        newEventoAluno.id_aluno = result.insertId
-        eventoAlunos.push(newEventoAluno)
-        res.status(201).json(newEventoAluno)
-      }
-    }
-  )
-})
+document.getElementById('addEventoAlunoForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const alunoId1 = document.getElementById('eventoAlunoAlunoId').value;
+  const id_aluno = parseInt(alunoId1)
+  const eventoId1 = document.getElementById('eventoAlunoEventoId').value;
+  const id_evento = parseInt(eventoId1)
 
-// 削除
-app.delete('/evento_alunos/:id_aluno/:id_evento', (req, res) => {
-  const alunoID = parseInt(req.params.id_aluno)
-  const eventoID = parseInt(req.params.id_evento)
-  const index = eventoAlunos.findIndex(eventoAluno => eventoAluno.id_aluno === alunoID && eventoAluno.id_evento === eventoID)
-  if (index !== -1) {
-    connection.query('DELETE FROM evento_aluno WHERE id_aluno=? AND id_evento=?', [alunoID, eventoID], err => {
-      if (err) {
-        console.error('evento_alunoテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
-      } else {
-        const removedEventoAluno = eventoAlunos.splice(index, 1)
-        res.json(removedEventoAluno[0])
-      }
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id_aluno: id_aluno,
+      id_evento: id_evento
     })
-  } else {
-    res.status(404).json({ message: '見つかりませんでした' })
-  }
-})
+  })
+    .then(response => response.json())
+    .then(data => {
+      getEventoAlunos();
+      document.getElementById('addEventoAlunoForm').reset();
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+function deleteEventoAluno(alunoId, eventoId) {
+  fetch(`${apiUrl}/${alunoId}/${eventoId}`, {
+    method: 'DELETE'
+  })
+    .then(response => response.json())
+    .then(data => getEventoAlunos())
+    .catch(error => console.error('Erro:', error));
+}
+
+getEventoAlunos();

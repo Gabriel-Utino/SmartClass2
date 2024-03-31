@@ -29,6 +29,10 @@ let disciplinas = []
 let professores = []
 let notas = []
 let responsaveis = []
+let turmaAlunos = []
+let eventoAlunos = []
+let eventoProfessors = []
+let turmaDisciplinas = []
 
 
 // Escolaのサーバー管理に関わる部分
@@ -576,7 +580,7 @@ app.post('/aluno_resps', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'Aluno_Respを追加できませんでした' })
       } else {
-        newAlunoResp.id_aluno = result.insertId
+        /* newAlunoResp.id_aluno = result.insertId */
         alunoResps.push(newAlunoResp)
         res.status(201).json(newAlunoResp)
       }
@@ -725,7 +729,7 @@ app.post('/turma_alunos', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'Turma_Alunoを追加できませんでした' })
       } else {
-        newTurmaAluno.id_aluno = result.insertId
+        /* newTurmaAluno.id_aluno = result.insertId */
         turmaAlunos.push(newTurmaAluno)
         res.status(201).json(newTurmaAluno)
       }
@@ -751,6 +755,8 @@ app.delete('/turma_alunos/:id_aluno/:id_turma', (req, res) => {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
+
+
 
 
 
@@ -874,7 +880,7 @@ app.post('/evento_alunos', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'evento_alunoを追加できませんでした' })
       } else {
-        newEventoAluno.id_aluno = result.insertId
+        /* newEventoAluno.id_aluno = result.insertId */
         eventoAlunos.push(newEventoAluno)
         res.status(201).json(newEventoAluno)
       }
@@ -938,7 +944,7 @@ app.post('/disciplina_alunos', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'Disciplina_Alunoを追加できませんでした' })
       } else {
-        newDisciplinaAluno.id_aluno = result.insertId
+        /* newDisciplinaAluno.id_aluno = result.insertId */
         disciplinaAlunos.push(newDisciplinaAluno)
         res.status(201).json(newDisciplinaAluno)
       }
@@ -1002,7 +1008,7 @@ app.post('/evento_professors', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'evento_professorを追加できませんでした' })
       } else {
-        newEventoProfessor.id_prof = result.insertId
+        /* newEventoProfessor.id_prof = result.insertId */
         eventoProfessors.push(newEventoProfessor)
         res.status(201).json(newEventoProfessor)
       }
@@ -1066,7 +1072,7 @@ app.post('/turma_disciplinas', (req, res) => {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'turma_disciplinaを追加できませんでした' })
       } else {
-        newTurmaDisciplina.id_turma = result.insertId
+        /* newTurmaDisciplina.id_turma = result.insertId */
         turmaDisciplinas.push(newTurmaDisciplina)
         res.status(201).json(newTurmaDisciplina)
       }

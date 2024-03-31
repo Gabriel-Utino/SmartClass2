@@ -28,9 +28,10 @@ function getAlunoResp() {
 // 追加
 document.getElementById('addAlunoRespForm').addEventListener('submit', function (event) {
   event.preventDefault();
-  const alunoId = document.getElementById('alunoId').value;
-  const respId = document.getElementById('respId').value;
-
+  const alunoId1 = document.getElementById('alunoId').value;
+  alunoId = parseInt(alunoId1)
+  const respId1 = document.getElementById('respId').value;
+  respId = parseInt(respId1)
   fetch(apiUrlAlunoResp, {
     method: 'POST',
     headers: {

@@ -123,3 +123,8 @@ function deleteResponsavel(id_resp) {
 }
 
 getResponsavel();
+
+// 編集キャンセル
+function cancelEdit() {
+  document.getElementById('updateResponsavelForm').reset();
+}

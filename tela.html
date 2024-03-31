@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Troca de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Escolha o seu tipo de usuário:</h2>
+        <a href="#" class="btn" onclick="setUserType('professor')">Professor</a>
+        <a href="#" class="btn" onclick="setUserType('aluno')">Aluno</a>
+        <a href="#" class="btn" onclick="setUserType('responsavel')">Responsável</a>
+    </div>
+
+    <script>
+        function setUserType(userType) {
+            // Aqui você pode adicionar a lógica para redirecionar o usuário para a página correspondente ao tipo selecionado
+            alert('Você selecionou ' + userType);
+            // Exemplo de redirecionamento:
+            // window.location.href = 'pagina_do_' + userType + '.html';
+        }
+    </script>
+</body>
+</html>
+
