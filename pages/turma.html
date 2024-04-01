@@ -135,8 +135,14 @@
           <div class="form-group">
             <input type="text" class="form-control" id="turmaPeriodo" placeholder="Periodo" required>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <input type="text" class="form-control" id="turmaIdProf" placeholder="ID do Professor" required>
+          </div> -->
+          
+          <div class="form-group">
+            <select class="form-control" id="turmaIdProf" required>
+              <option value="" disabled selected>Escolha a escola</option>
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
@@ -155,9 +161,15 @@
           <div class="form-group">
             <input type="text" class="form-control" id="editTurmaPeriodo" placeholder="Periodo" required>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <input type="text" class="form-control" id="editTurmaIdProf" placeholder="ID do Professor" required>
+          </div> -->
+          <div class="form-group">
+            <select class="form-control" id="editTurmaIdProf" required>
+              <option value="" disabled selected>Escolha a escola</option>
+            </select>
           </div>
+
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>
         </form>

@@ -3,5 +3,8 @@ body {
   padding-top: 70px; /* デフォルトのナビゲーションバーの高さは56px */
   background-color: #d6d6d6;
 }
-
+.form-group select {
+    height: 38px; /* サイズを調整する必要がある場合は適宜調整してください */
+    width: auto;
+}
 /* Professor部分 table */
