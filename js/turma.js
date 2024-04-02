@@ -2,25 +2,6 @@ const apiUrlTurma = 'http://localhost:3000/turmas'
 const apiUrlProfessor = 'http://localhost:3000/professores'
 
 // リストを表示
-/* function displayTurma(turma) {
-  const turmaList = document.getElementById('turmaList');
-  turmaList.innerHTML = '';
-  turma.forEach(turma => {
-    const turmaElement = document.createElement('tr');
-    turmaElement.innerHTML = `
-              <td>${turma.id_turma}</td>
-              <td>${turma.nome_turma}</td>
-              <td>${turma.periodo}</td>
-              <td>${turma.id_prof}</td>
-              <td>
-                <button onclick="updateTurma(${turma.id_turma})">Editar</button>
-                <button onclick="deleteTurma(${turma.id_turma})">Excluir</button>
-              </td>
-          `;
-    turmaList.appendChild(turmaElement);
-  });
-} */
-// リストを表示
 function displayTurma(turma) {
   const turmaList = document.getElementById('turmaList')
   turmaList.innerHTML = ''
@@ -167,3 +148,8 @@ function populateProf() {
 
 // ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateProf)
+
+
+
+
+

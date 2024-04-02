@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
@@ -127,19 +127,24 @@
     <!-- 新しい学生と責任者の関連付けを追加するフォーム -->
     <div class="row">
       <div class="col-md-6">
-        <h2>Adicionar Aluno ao Responsável</h2>
+        <h2>Adicionar Aluno à Turma</h2>
         <form id="addAlunoRespForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="alunoId" placeholder="ID do Aluno" required>
+            <select class="form-control" id="alunoId" required>
+              <option value="">Selecione o Aluno</option>
+              <!-- Alunosを追加 -->
+            </select>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="respId" placeholder="ID do Responsável" required>
+            <select class="form-control" id="respId" required>
+              <option value="">Selecione a responsavel</option>
+              <!-- Respを追加 -->
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
     </div>
-  </div>
 
 
 
