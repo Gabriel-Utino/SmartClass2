@@ -3,68 +3,85 @@
 ###dateBASE
 -- Escola テーブルを作成
 CREATE TABLE Escola (
-id_escola INT AUTO_INCREMENT PRIMARY KEY,
-nome_escola VARCHAR(255),
-email_escola VARCHAR(255)
+    id_escola INT AUTO_INCREMENT PRIMARY KEY,
+    nome_escola VARCHAR(255) NOT NULL,
+    email_escola VARCHAR(255) NOT NULL UNIQUE
 );
+
 
 -- Professor テーブルを作成
 CREATE TABLE Professor (
-id_prof INT AUTO_INCREMENT PRIMARY KEY,
-nome_prof VARCHAR(255) NOT NULL,
-cpf_prof VARCHAR(11) NOT NULL,
-telefone_prof VARCHAR(255) NOT NULL,
-email_consti_prof VARCHAR(255) NOT NULL,
-email_pess_prof VARCHAR(255),
-nascimento_prof VARCHAR(255),
-endereco_prof VARCHAR(255),
-id_disciplina INT,
-id_escola INT,
-UNIQUE(cpf_prof),
-UNIQUE(telefone_prof)
+    id_prof INT AUTO_INCREMENT PRIMARY KEY,
+    nome_prof VARCHAR(255) NOT NULL,
+    cpf_prof VARCHAR(11) NOT NULL UNIQUE,
+    telefone_prof VARCHAR(255) NOT NULL UNIQUE,
+    email_consti_prof VARCHAR(255) NOT NULL UNIQUE,
+    email_pess_prof VARCHAR(255) NOT NULL UNIQUE,
+    nascimento_prof DATE NOT NULL,
+    endereco_prof VARCHAR(255) NOT NULL,
+    id_disciplina INT NOT NULL,
+    id_escola INT NOT NULL,
+    CONSTRAINT nome_prof_formato_check CHECK (nome_prof REGEXP '^[A-Za-z ]+$'),
+    CONSTRAINT cpf_prof_formato_check CHECK (cpf_prof REGEXP '^[0-9]+$'),
+    CONSTRAINT telefone_prof_formato_check CHECK (telefone_prof REGEXP '^[0-9]+$'),
+    CONSTRAINT email_consti_prof_formato_check CHECK (email_consti_prof REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
+    CONSTRAINT email_pess_prof_formato_check CHECK (email_pess_prof REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 );
+
 
 -- Turma テーブルを作成
 CREATE TABLE Turma (
-id_turma INT AUTO_INCREMENT PRIMARY KEY,
-nome_turma VARCHAR(255) NOT NULL,
-periodo INT,
-id_prof INT,
-FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
+    id_turma INT AUTO_INCREMENT PRIMARY KEY,
+    nome_turma VARCHAR(255) NOT NULL,
+    Ano DATE NOT NULL,
+    id_prof INT NOT NULL,
+    FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
 );
 
 -- Disciplina テーブルを作成
 CREATE TABLE Disciplina (
-id_disciplina INT AUTO_INCREMENT PRIMARY KEY,
-disciplina VARCHAR(255),
-id_prof INT,
-FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
+    id_disciplina INT AUTO_INCREMENT PRIMARY KEY,
+    disciplina VARCHAR(255) NOT NULL,
+    id_prof INT NOT NULL,
+    FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
 );
+
 
 -- Responsavel テーブルを作成
 CREATE TABLE Responsavel (
-id_resp INT AUTO_INCREMENT PRIMARY KEY,
-nome_pesp VARCHAR(255),
-cpf_resp VARCHAR(255),
-endereco_pesp VARCHAR(255),
-telefone_pesp VARCHAR(20),
-email_pesp VARCHAR(255),
-id_escola INT,
-FOREIGN KEY (id_escola) REFERENCES Escola(id_escola)
+    id_resp INT AUTO_INCREMENT PRIMARY KEY,
+    nome_pesp VARCHAR(255) NOT NULL,
+    cpf_resp VARCHAR(255) NOT NULL UNIQUE,
+    endereco_pesp VARCHAR(255) NOT NULL,
+    telefone_pesp VARCHAR(20) NOT NULL UNIQUE,
+    email_pesp VARCHAR(255) NOT NULL UNIQUE,
+    id_escola INT NOT NULL,
+    FOREIGN KEY (id_escola) REFERENCES Escola(id_escola),
+    CONSTRAINT nome_pesp_formato_check CHECK (nome_pesp REGEXP '^[A-Za-z ]+$'),
+    CONSTRAINT cpf_resp_formato_check CHECK (cpf_resp REGEXP '^[0-9]+$'),
+    CONSTRAINT telefone_pesp_formato_check CHECK (telefone_pesp REGEXP '^[0-9]+$'),
+    CONSTRAINT email_pesp_formato_check CHECK (email_pesp REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 );
+
 
 -- Aluno テーブルを作成
 CREATE TABLE Aluno (
-id_aluno INT AUTO_INCREMENT PRIMARY KEY,
-nome_aluno VARCHAR(255),
-cpf_aluno VARCHAR(255),
-endereco_aluno VARCHAR(255),
-telefone_aluno VARCHAR(255),
-email_aluno VARCHAR(255),
-nascimento_aluno date,
-ra_aluno VARCHAR(255),
-date_matricula date
+    id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome_aluno VARCHAR(255) NOT NULL,
+    cpf_aluno VARCHAR(255) NOT NULL UNIQUE,
+    endereco_aluno VARCHAR(255) NOT NULL,
+    telefone_aluno VARCHAR(255) NOT NULL UNIQUE,
+    email_aluno VARCHAR(255) NOT NULL UNIQUE,
+    nascimento_aluno DATE NOT NULL,
+    ra_aluno VARCHAR(255) NOT NULL UNIQUE,
+    date_matricula DATE NOT NULL,
+    CONSTRAINT nome_formato_check CHECK (nome_aluno REGEXP '^[A-Za-z ]+$'),
+    CONSTRAINT cpf_formato_check CHECK (cpf_aluno REGEXP '^[0-9]+$'),
+    CONSTRAINT telefone_formato_check CHECK (telefone_aluno REGEXP '^[0-9]+$'),
+    CONSTRAINT email_formato_check CHECK (email_aluno REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
+    CONSTRAINT ra_formato_check CHECK (ra_aluno REGEXP '^[0-9]+$')
 );
+
 
 -- Aluno と Responsavel の多対多の関係を持つための関連テーブル
 CREATE TABLE Aluno_Resp (
@@ -100,11 +117,12 @@ PRIMARY KEY (id_aluno, id_turma)
 
 -- Evento テーブルを作成
 CREATE TABLE Evento (
-id_evento INT AUTO_INCREMENT PRIMARY KEY,
-nome_evento VARCHAR(255),
-link_evento VARCHAR(255),
-date_evento date
+    id_evento INT AUTO_INCREMENT PRIMARY KEY,
+    nome_evento VARCHAR(255) NOT NULL,
+    link_evento VARCHAR(255) NOT NULL,
+    date_evento DATE NOT NULL
 );
+
 
 -- Evento_Aluno の多対多の関係を持つための関連テーブル
 CREATE TABLE evento_aluno (
