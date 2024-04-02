@@ -151,7 +151,7 @@
             <input type="text" class="form-control" id="professorPersonalEmail" placeholder="Email Pessoal" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="professorBirthdate" placeholder="Data de Nascimento" required>
+            <input type="date" class="form-control" id="professorBirthdate" placeholder="Data de Nascimento" required>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="professorAddress" placeholder="Endereço Completo" required>
@@ -159,9 +159,16 @@
           <div class="form-group">
             <input type="text" class="form-control" id="professorDisciplina" placeholder="Disciplina" required>
           </div>
-          <div class="form-group">
+
+          <!-- <div class="form-group">
             <input type="text" class="form-control" id="professorEscola" placeholder="Escola" required>
+          </div> -->
+          <div class="form-group">
+            <select class="form-control" id="professorEscola" required>
+              <option value="" disabled selected>Escolha a escola</option>
+            </select>
           </div>
+
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
@@ -192,7 +199,7 @@
               required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorBirthdate" placeholder="Data de Nascimento"
+            <input type="date" class="form-control" id="editProfessorBirthdate" placeholder="Data de Nascimento"
               required>
           </div>
           <div class="form-group">
@@ -200,9 +207,14 @@
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="editProfessorDisciplina" placeholder="Disciplina" required>
-          </div>
+          </div><!-- 
           <div class="form-group">
             <input type="text" class="form-control" id="editProfessorEscola" placeholder="Escola" required>
+          </div> -->
+          <div class="form-group">
+            <select class="form-control" id="editProfessorEscola" required>
+              <option value="" disabled selected>Escolha a escola</option>
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>

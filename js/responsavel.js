@@ -1,26 +1,33 @@
-const apiUrlResponsavel = 'http://localhost:3000/responsaveis';
+const apiUrlResponsavel = 'http://localhost:3000/responsaveis'
+const apiUrlEscolas = 'http://localhost:3000/escolas'
 
 // リストを表示
 function displayResponsavel(responsavel) {
-  const responsavelList = document.getElementById('responsavelList');
-  responsavelList.innerHTML = '';
+  const responsavelList = document.getElementById('responsavelList')
+  responsavelList.innerHTML = ''
   responsavel.forEach(responsavel => {
-    const responsavelElement = document.createElement('tr');
-    responsavelElement.innerHTML = `
+    // 学校の情報を取得
+    fetch(`${apiUrlEscolas}/${responsavel.id_escola}`)
+      .then(response => response.json())
+      .then(escola => {
+        const responsavelElement = document.createElement('tr')
+        responsavelElement.innerHTML = `
               <td>${responsavel.id_resp}</td>
               <td>${responsavel.nome_pesp}</td>
               <td>${responsavel.cpf_resp}</td>
               <td>${responsavel.endereco_pesp}</td>
               <td>${responsavel.telefone_pesp}</td>
               <td>${responsavel.email_pesp}</td>
-              <td>${responsavel.id_escola}</td>
+              <td>${escola.nome_escola}</td>
               <td>
                 <button onclick="updateResponsavel(${responsavel.id_resp})">Editar</button>
                 <button onclick="deleteResponsavel(${responsavel.id_resp})">Excluir</button>
               </td>
-          `;
-    responsavelList.appendChild(responsavelElement);
-  });
+          `
+        responsavelList.appendChild(responsavelElement)
+      })
+      .catch(error => console.error('Erro:', error))
+  })
 }
 
 // 取得
@@ -28,18 +35,18 @@ function getResponsavel() {
   fetch(apiUrlResponsavel)
     .then(response => response.json())
     .then(data => displayResponsavel(data))
-    .catch(error => console.error('Erro:', error));
+    .catch(error => console.error('Erro:', error))
 }
 
 // 追加
 document.getElementById('addResponsavelForm').addEventListener('submit', function (event) {
-  event.preventDefault();
-  const responsavelName = document.getElementById('responsavelName').value;
-  const responsavelCpf = document.getElementById('responsavelCpf').value;
-  const responsavelEndereco = document.getElementById('responsavelEndereco').value;
-  const responsavelTelefone = document.getElementById('responsavelTelefone').value;
-  const responsavelEmail = document.getElementById('responsavelEmail').value;
-  const responsavelIdEscola = document.getElementById('responsavelIdEscola').value;
+  event.preventDefault()
+  const responsavelName = document.getElementById('responsavelName').value
+  const responsavelCpf = document.getElementById('responsavelCpf').value
+  const responsavelEndereco = document.getElementById('responsavelEndereco').value
+  const responsavelTelefone = document.getElementById('responsavelTelefone').value
+  const responsavelEmail = document.getElementById('responsavelEmail').value
+  const responsavelIdEscola = document.getElementById('responsavelIdEscola').value
 
   fetch(apiUrlResponsavel, {
     method: 'POST',
@@ -57,38 +64,38 @@ document.getElementById('addResponsavelForm').addEventListener('submit', functio
   })
     .then(response => response.json())
     .then(data => {
-      getResponsavel();
-      document.getElementById('addResponsavelForm').reset();
+      getResponsavel()
+      document.getElementById('addResponsavelForm').reset()
     })
-    .catch(error => console.error('Erro:', error));
-});
+    .catch(error => console.error('Erro:', error))
+})
 
 // 更新
 function updateResponsavel(id) {
   fetch(`${apiUrlResponsavel}/${id}`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById('editResponsavelId').value = data.id_resp;
-      document.getElementById('editResponsavelName').value = data.nome_pesp;
-      document.getElementById('editResponsavelCpf').value = data.cpf_resp;
-      document.getElementById('editResponsavelEndereco').value = data.endereco_pesp;
-      document.getElementById('editResponsavelTelefone').value = data.telefone_pesp;
-      document.getElementById('editResponsavelEmail').value = data.email_pesp;
-      document.getElementById('editResponsavelIdEscola').value = data.id_escola;
+      document.getElementById('editResponsavelId').value = data.id_resp
+      document.getElementById('editResponsavelName').value = data.nome_pesp
+      document.getElementById('editResponsavelCpf').value = data.cpf_resp
+      document.getElementById('editResponsavelEndereco').value = data.endereco_pesp
+      document.getElementById('editResponsavelTelefone').value = data.telefone_pesp
+      document.getElementById('editResponsavelEmail').value = data.email_pesp
+      document.getElementById('editResponsavelIdEscola').value = data.id_escola
     })
-    .catch(error => console.error('Erro:', error));
+    .catch(error => console.error('Erro:', error))
 }
 
 // 実際に更新
 document.getElementById('updateResponsavelForm').addEventListener('submit', function (event) {
-  event.preventDefault();
-  const responsavelId = document.getElementById('editResponsavelId').value;
-  const responsavelName = document.getElementById('editResponsavelName').value;
-  const responsavelCpf = document.getElementById('editResponsavelCpf').value;
-  const responsavelEndereco = document.getElementById('editResponsavelEndereco').value;
-  const responsavelTelefone = document.getElementById('editResponsavelTelefone').value;
-  const responsavelEmail = document.getElementById('editResponsavelEmail').value;
-  const responsavelIdEscola = document.getElementById('editResponsavelIdEscola').value;
+  event.preventDefault()
+  const responsavelId = document.getElementById('editResponsavelId').value
+  const responsavelName = document.getElementById('editResponsavelName').value
+  const responsavelCpf = document.getElementById('editResponsavelCpf').value
+  const responsavelEndereco = document.getElementById('editResponsavelEndereco').value
+  const responsavelTelefone = document.getElementById('editResponsavelTelefone').value
+  const responsavelEmail = document.getElementById('editResponsavelEmail').value
+  const responsavelIdEscola = document.getElementById('editResponsavelIdEscola').value
 
   fetch(`${apiUrlResponsavel}/${responsavelId}`, {
     method: 'PUT',
@@ -106,11 +113,11 @@ document.getElementById('updateResponsavelForm').addEventListener('submit', func
   })
     .then(response => response.json())
     .then(data => {
-      getResponsavel();
-      document.getElementById('editResponsavelForm').style.display = 'none';
+      getResponsavel()
+      document.getElementById('editResponsavelForm').style.display = 'none'
     })
-    .catch(error => console.error('Erro:', error));
-});
+    .catch(error => console.error('Erro:', error))
+})
 
 // 削除ボタン
 function deleteResponsavel(id_resp) {
@@ -119,12 +126,46 @@ function deleteResponsavel(id_resp) {
   })
     .then(response => response.json())
     .then(data => getResponsavel())
-    .catch(error => console.error('Erro:', error));
+    .catch(error => console.error('Erro:', error))
 }
 
-getResponsavel();
+getResponsavel()
 
 // 編集キャンセル
 function cancelEdit() {
-  document.getElementById('updateResponsavelForm').reset();
+  document.getElementById('updateResponsavelForm').reset()
 }
+
+
+// サーバーから学校の情報を取得してセレクトボックスに追加する関数
+function populateSchools() {
+  fetch(apiUrlEscolas)
+    .then(response => response.json())
+    .then(data => {
+      const selectElement = document.getElementById('responsavelIdEscola')
+      data.forEach(escola => {
+        const option = document.createElement('option')
+        option.value = escola.id_escola
+        option.textContent = escola.nome_escola
+        selectElement.appendChild(option)
+      })
+    })
+    .catch(error => console.error('Error fetching schools:', error))
+
+  fetch(apiUrlEscolas)
+    .then(response => response.json())
+    .then(data => {
+      const selectElement = document.getElementById('editResponsavelIdEscola')
+      data.forEach(escola => {
+        const option = document.createElement('option')
+        option.value = escola.id_escola
+        option.textContent = escola.nome_escola
+        selectElement.appendChild(option)
+      })
+    })
+    .catch(error => console.error('Error fetching schools:', error))
+}
+
+
+// ページが読み込まれたら学校の情報を取得してセレクトボックスを更新する
+document.addEventListener('DOMContentLoaded', populateSchools)
