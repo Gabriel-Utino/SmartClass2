@@ -13,11 +13,11 @@ function displayResponsavel(responsavel) {
         const responsavelElement = document.createElement('tr')
         responsavelElement.innerHTML = `
               <td>${responsavel.id_resp}</td>
-              <td>${responsavel.nome_pesp}</td>
+              <td>${responsavel.nome_resp}</td>
               <td>${responsavel.cpf_resp}</td>
-              <td>${responsavel.endereco_pesp}</td>
-              <td>${responsavel.telefone_pesp}</td>
-              <td>${responsavel.email_pesp}</td>
+              <td>${responsavel.endereco_resp}</td>
+              <td>${responsavel.telefone_resp}</td>
+              <td>${responsavel.email_resp}</td>
               <td>${escola.nome_escola}</td>
               <td>
                 <button onclick="updateResponsavel(${responsavel.id_resp})">Editar</button>
@@ -54,11 +54,11 @@ document.getElementById('addResponsavelForm').addEventListener('submit', functio
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      nome_pesp: responsavelName,
+      nome_resp: responsavelName,
       cpf_resp: responsavelCpf,
-      endereco_pesp: responsavelEndereco,
-      telefone_pesp: responsavelTelefone,
-      email_pesp: responsavelEmail,
+      endereco_resp: responsavelEndereco,
+      telefone_resp: responsavelTelefone,
+      email_resp: responsavelEmail,
       id_escola: responsavelIdEscola
     })
   })
@@ -76,11 +76,11 @@ function updateResponsavel(id) {
     .then(response => response.json())
     .then(data => {
       document.getElementById('editResponsavelId').value = data.id_resp
-      document.getElementById('editResponsavelName').value = data.nome_pesp
+      document.getElementById('editResponsavelName').value = data.nome_resp
       document.getElementById('editResponsavelCpf').value = data.cpf_resp
-      document.getElementById('editResponsavelEndereco').value = data.endereco_pesp
-      document.getElementById('editResponsavelTelefone').value = data.telefone_pesp
-      document.getElementById('editResponsavelEmail').value = data.email_pesp
+      document.getElementById('editResponsavelEndereco').value = data.endereco_resp
+      document.getElementById('editResponsavelTelefone').value = data.telefone_resp
+      document.getElementById('editResponsavelEmail').value = data.email_resp
       document.getElementById('editResponsavelIdEscola').value = data.id_escola
     })
     .catch(error => console.error('Erro:', error))
@@ -103,11 +103,11 @@ document.getElementById('updateResponsavelForm').addEventListener('submit', func
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      nome_pesp: responsavelName,
+      nome_resp: responsavelName,
       cpf_resp: responsavelCpf,
-      endereco_pesp: responsavelEndereco,
-      telefone_pesp: responsavelTelefone,
-      email_pesp: responsavelEmail,
+      endereco_resp: responsavelEndereco,
+      telefone_resp: responsavelTelefone,
+      email_resp: responsavelEmail,
       id_escola: responsavelIdEscola
     })
   })

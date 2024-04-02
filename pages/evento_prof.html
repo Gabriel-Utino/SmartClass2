@@ -124,21 +124,37 @@
 
     <hr>
 
-    <!-- 新しいイベントとProfessorの関連付けを追加するフォーム -->
+    <!-- EventoとProfessorの関連付けを追加するフォーム -->
     <div class="row">
       <div class="col-md-6">
         <h2>Adicionar Evento ao Professor</h2>
         <form id="addEventoProfessorForm">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <input type="text" class="form-control" id="eventoProfessorProfessorId" placeholder="ID do Professor"
               required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="eventoProfessorEventoId" placeholder="ID do Evento" required>
+            <input type="text" class="form-control" id="eventoProfessorProfessorId" placeholder="ID do Evento" required>
+          </div> -->
+
+          <div class="form-group">
+            <select class="form-control" id="eventoProfessorProfessorId" required>
+              <option value="">Selecione o Professor</option>
+              <!-- Professorを追加 -->
+            </select>
           </div>
+          <div class="form-group">
+            <select class="form-control" id="eventoProfessorEventoId" required>
+              <option value="">Selecione a Evento</option>
+              <!-- Eventoを追加 -->
+            </select>
+          </div>
+
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
+
+      
     </div>
   </div>
 

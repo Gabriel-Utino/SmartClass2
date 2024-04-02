@@ -45,11 +45,11 @@ FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
 -- Responsavel table
 CREATE TABLE Responsavel (
 id_resp INT AUTO_INCREMENT PRIMARY KEY,
-nome_pesp VARCHAR(255),
+nome_resp VARCHAR(255),
 cpf_resp VARCHAR(255),
-endereco_pesp VARCHAR(255),
-telefone_pesp VARCHAR(20),
-email_pesp VARCHAR(255),
+endereco_resp VARCHAR(255),
+telefone_resp VARCHAR(20),
+email_resp VARCHAR(255),
 id_escola INT,
 FOREIGN KEY (id_escola) REFERENCES Escola(id_escola)
 );
@@ -116,7 +116,7 @@ FOREIGN KEY (id_evento) REFERENCES Evento(id_evento),
 PRIMARY KEY (id_aluno, id_evento)
 );
 
--- Aluno と Disciplina table 
+-- Aluno と Disciplina table
 CREATE TABLE Disciplina_Aluno (
 id_aluno INT,
 id_disciplina INT,
@@ -142,11 +142,6 @@ FOREIGN KEY (id_turma) REFERENCES turma(id_turma),
 FOREIGN KEY (id_disciplina) REFERENCES disciplina(id_disciplina),
 PRIMARY KEY (id_turma, id_disciplina)
 );
-
-
-
-
-
 
 ##Test
 -- Escola conteúdo da tabela
@@ -182,7 +177,7 @@ INSERT INTO Disciplina (disciplina, id_prof) VALUES
 ('Disciplina5', 5);
 
 -- Responsavel conteúdo da tabela
-INSERT INTO Responsavel (nome_pesp, cpf_resp, endereco_pesp, telefone_pesp, email_pesp, id_escola) VALUES
+INSERT INTO Responsavel (nome_resp, cpf_resp, endereco_resp, telefone_resp, email_resp, id_escola) VALUES
 ('Responsavel', '12345678901', 'Endereço do Responsavel 1', '111-222-3333', 'resp1@example.com', 1),
 ('Responsave2', '23456789012', 'Endereço do Responsavel 2', '222-333-4444', 'resp2@example.com', 2),
 ('Responsave3', '34567890123', 'Endereço do Responsavel 3', '333-444-5555', 'resp3@example.com', 3),
@@ -213,7 +208,7 @@ INSERT INTO Notas (id_aluno, id_disciplina, n1, AI, AP, faltas, periodo_letivo) 
 (4, 4, 90, 85, 95, 0, '第 1 期'),
 (5, 5, 88, 90, 92, 1, '第 1 期');
 
--- Turma_Aluno conteúdo da tabela 
+-- Turma_Aluno conteúdo da tabela
 INSERT INTO Turma_Aluno (id_aluno, id_turma) VALUES
 (5, 5),
 (1, 2),
