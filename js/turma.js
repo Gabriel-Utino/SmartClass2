@@ -25,7 +25,7 @@ function displayTurma(turma) {
   const turmaList = document.getElementById('turmaList')
   turmaList.innerHTML = ''
   turma.forEach(turma => {
-    // 学校の情報を取得
+    // Escolaの情報を取得
     fetch(`${apiUrlProfessor}/${turma.id_prof}`)
       .then(response => response.json())
       .then(professor => {
@@ -136,7 +136,7 @@ function cancelEdit() {
   document.getElementById('updateTurmaForm').reset()
 }
 
-// サーバーから学校の情報を取得してセレクトボックスに追加する関数
+// サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
 function populateProf() {
   fetch(apiUrlProfessor)
     .then(response => response.json())
@@ -165,5 +165,5 @@ function populateProf() {
     .catch(error => console.error('Error fetching schools:', error))
 }
 
-// ページが読み込まれたら学校の情報を取得してセレクトボックスを更新する
+// ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateProf)

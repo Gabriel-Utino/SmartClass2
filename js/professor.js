@@ -4,10 +4,10 @@ const apiUrlEscolas = 'http://localhost:3000/escolas'
 // リストを表示
 function displayProfessor(professor) {
   const professorList = document.getElementById('professorList')
-  
+
   professorList.innerHTML = ''
   professor.forEach(professor => {
-    // 学校の情報を取得
+    // Escolaの情報を取得
     fetch(`${apiUrlEscolas}/${professor.id_escola}`)
       .then(response => response.json())
       .then(escola => {
@@ -157,7 +157,7 @@ function cancelEdit() {
   document.getElementById('updateProfessorForm').reset()
 }
 
-// サーバーから学校の情報を取得してセレクトボックスに追加する関数
+// サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
 function populateSchools() {
   fetch(apiUrlEscolas)
     .then(response => response.json())
@@ -186,6 +186,5 @@ function populateSchools() {
     .catch(error => console.error('Error fetching schools:', error))
 }
 
-
-// ページが読み込まれたら学校の情報を取得してセレクトボックスを更新する
+// ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateSchools)

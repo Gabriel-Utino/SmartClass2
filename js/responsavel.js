@@ -6,7 +6,7 @@ function displayResponsavel(responsavel) {
   const responsavelList = document.getElementById('responsavelList')
   responsavelList.innerHTML = ''
   responsavel.forEach(responsavel => {
-    // 学校の情報を取得
+    // Escolaの情報を取得
     fetch(`${apiUrlEscolas}/${responsavel.id_escola}`)
       .then(response => response.json())
       .then(escola => {
@@ -136,8 +136,7 @@ function cancelEdit() {
   document.getElementById('updateResponsavelForm').reset()
 }
 
-
-// サーバーから学校の情報を取得してセレクトボックスに追加する関数
+// サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
 function populateSchools() {
   fetch(apiUrlEscolas)
     .then(response => response.json())
@@ -166,6 +165,5 @@ function populateSchools() {
     .catch(error => console.error('Error fetching schools:', error))
 }
 
-
-// ページが読み込まれたら学校の情報を取得してセレクトボックスを更新する
+// ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateSchools)

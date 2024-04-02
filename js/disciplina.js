@@ -112,7 +112,7 @@ function cancelEdit() {
   document.getElementById('updateDisciplinaForm').reset()
 }
 
-// サーバーから学校の情報を取得してセレクトボックスに追加する関数
+// サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
 function populateProf() {
   fetch(apiUrlProfessor)
     .then(response => response.json())
@@ -141,5 +141,5 @@ function populateProf() {
     .catch(error => console.error('Error fetching schools:', error))
 }
 
-// ページが読み込まれたら学校の情報を取得してセレクトボックスを更新する
+// ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateProf)
