@@ -1118,6 +1118,21 @@ app.delete('/prof_disciplinas/:id_prof_disc', (req, res) => {
   }
 });
 
+// サーバーサイドのルートを変更
+app.get('/alunos/turma/:id_turma', (req, res) => {
+  const turmaID = parseInt(req.params.id_turma);
+  const alunosTurma = alunos.filter(aluno => aluno.id_turma === turmaID); // 特定のTurmaに関連するAlunoをフィルタリング
+  res.json(alunosTurma);
+});
+
+// サーバーサイドのルートを変更
+app.get('/notas_faltas/disciplina/:id_disciplina', (req, res) => {
+  const disciplinaID = parseInt(req.params.id_disciplina);
+  const notasDisciplina = notas.filter(nota => nota.id_disciplina === disciplinaID); // 特定のDisciplinaに関連するNotas_faltasをフィルタリング
+  res.json(notasDisciplina);
+});
+
+
 
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました / Servidor iniciado na porta ${port}`)
