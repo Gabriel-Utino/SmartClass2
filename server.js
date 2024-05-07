@@ -1126,12 +1126,28 @@ app.get('/alunos/turma/:id_turma', (req, res) => {
 });
 
 // サーバーサイドのルートを変更
+app.get('/turmas/:id_turma/disciplinas', (req, res) => {
+  const turmaID = parseInt(req.params.id_turma);
+  // TurmaとDisciplinaを結合して、特定のTurmaに関連するDisciplinaを取得
+  const query = `SELECT Disciplina.id_disciplina, Disciplina.disciplina FROM Disciplina 
+                 INNER JOIN Turma_Disciplina ON Disciplina.id_disciplina = Turma_Disciplina.id_disciplina 
+                 WHERE Turma_Disciplina.id_turma = ?`;
+  connection.query(query, [turmaID], (err, results) => {
+    if (err) {
+      console.error('Turmaに関連するDisciplinaの取得エラー:', err);
+      res.status(500).json({ message: 'Turmaに関連するDisciplinaを取得できませんでした' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// サーバーサイドのルートを変更
 app.get('/notas_faltas/disciplina/:id_disciplina', (req, res) => {
   const disciplinaID = parseInt(req.params.id_disciplina);
   const notasDisciplina = notas.filter(nota => nota.id_disciplina === disciplinaID); // 特定のDisciplinaに関連するNotas_faltasをフィルタリング
   res.json(notasDisciplina);
 });
-
 
 
 app.listen(port, () => {
