@@ -96,8 +96,8 @@ CREATE TABLE Notas_faltas (
     AI REAL,
     AP REAL,
     faltas INT,
-    academic_year VARCHAR(10),
-    data DATE,
+    academic_year YEAR,
+    data_matricula DATE,
     semestre INT,
     FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id_disciplina),
     FOREIGN KEY (id_aluno) REFERENCES Aluno(id_aluno)
@@ -118,6 +118,8 @@ CREATE TABLE Turma_Disciplina (
     FOREIGN KEY (id_turma) REFERENCES Turma(id_turma),
     FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id_disciplina)
 );
+
+
 
 
 
@@ -165,3 +167,50 @@ INSERT INTO Responsavel_Aluno (id_resp, id_aluno) VALUES
 (4, 4),
 (5, 5);
 
+-- 仮のデータ
+INSERT INTO Evento (nome_evento, link_evento, data_evento) VALUES
+('Conference', 'http://example.com/conference', '2024-05-10'),
+('Workshop', 'http://example.com/workshop', '2024-06-15'),
+('Seminar', 'http://example.com/seminar', '2024-07-20'),
+('Training', 'http://example.com/training', '2024-08-25'),
+('Symposium', 'http://example.com/symposium', '2024-09-30');
+
+-- 仮のデータ
+INSERT INTO Evento_aluno (id_evento, id_aluno) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- 仮のデータ
+INSERT INTO Aluno_disciplina (id_aluno, id_disciplina) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- 仮のデータ
+INSERT INTO Evento_professor (id_evento, id_prof) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- 仮のデータ
+INSERT INTO Turma_Disciplina (id_turma, id_disciplina) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- 仮のデータ
+INSERT INTO Prof_Disciplina (id_prof, id_disciplina) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
