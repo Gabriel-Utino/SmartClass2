@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3000/disciplina_alunos'
+const apiUrl = 'http://localhost:3000/Aluno_disciplina'
 const apiUrlAluno = 'http://localhost:3000/alunos'
 const apiUrlDisciplina = 'http://localhost:3000/disciplinas'
 
@@ -15,7 +15,7 @@ function displayDisciplinaAluno(disciplinaAluno) {
               <td>${alunoName}</td>
               <td>${disciName}</td>
               <td>
-                <button onclick="deleteDisciplinaAluno(${disciplinaAluno.id_aluno}, ${disciplinaAluno.id_disciplina})">Excluir</button>
+                <button onclick="deleteDisciplinaAluno(${disciplinaAluno.id_aluno_disc})">Excluir</button>
               </td>
           `
         disciplinaAlunoList.appendChild(disciplinaAlunoElement)
@@ -73,8 +73,8 @@ document.getElementById('addDisciplinaAlunoForm').addEventListener('submit', fun
     .catch(error => console.error('Erro:', error))
 })
 
-function deleteDisciplinaAluno(alunoId, disciplinaId) {
-  fetch(`${apiUrl}/${alunoId}/${disciplinaId}`, {
+function deleteDisciplinaAluno(id_aluno_disc) {
+  fetch(`${apiUrl}/${id_aluno_disc}`, {
     method: 'DELETE'
   })
     .then(response => response.json())

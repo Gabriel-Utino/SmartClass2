@@ -35,6 +35,7 @@ let responsaveis = []
 let alunoResps = []
 let turmas = []
 let turmaDisciplinas = []
+let alunosTurma = []
 
 
 
@@ -167,8 +168,8 @@ app.get('/turmas/:id_turma', (req, res) => {
 app.post('/turmas', (req, res) => {
   const newTurma = req.body
   connection.query(
-    'INSERT INTO Turma (nome_turma, Ano, periodo) VALUES (?, ?, ?)',
-    [newTurma.nome_turma, newTurma.Ano, newTurma.periodo],
+    'INSERT INTO Turma (nome_turma, Ano, semestre) VALUES (?, ?, ?)',
+    [newTurma.nome_turma, newTurma.Ano, newTurma.semestre],
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
@@ -188,8 +189,8 @@ app.put('/turmas/:id_turma', (req, res) => {
   const index = turmas.findIndex(turma => turma.id_turma === id_turma)
   if (index !== -1) {
     connection.query(
-      'UPDATE Turma SET nome_turma=?, Ano=?, periodo=? WHERE id_turma=?',
-      [updatedTurma.nome_turma, updatedTurma.Ano, updatedTurma.periodo, id_turma],
+      'UPDATE Turma SET nome_turma=?, Ano=?, semestre=? WHERE id_turma=?',
+      [updatedTurma.nome_turma, updatedTurma.Ano, updatedTurma.semestre, id_turma],
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
@@ -514,7 +515,7 @@ app.delete('/alunos/:id_aluno', (req, res) => {
 
 // Responsavel_Alunoのサーバー管理に関わる部分
 // Responsavel_Alunoテーブルのデータ取得
-connection.query('SELECT * FROM Responsavel_Aluno;', (err, results) => {
+connection.query('SELECT * FROM responsavel_aluno;', (err, results) => {
   if (err) {
     console.error('Aluno_Respテーブルでエラー発生: ' + err)
   } else {
@@ -540,26 +541,25 @@ app.post('/resps_aluno', (req, res) => {
   const newAlunoResp = req.body
   connection.query(
     'INSERT INTO Responsavel_Aluno  (id_resp, id_aluno) VALUES (?, ?)',
-    [newAlunoResp.id_resp, newAlunoResp.id_aluno],
+    [newAlunoResp.id_aluno, newAlunoResp.id_resp],
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
         res.status(500).json({ message: 'Aluno_Respを追加できませんでした' })
       } else {
-        /* newAlunoResp.id_aluno = result.insertId */
+        newAlunoResp.id_resp_aluno = result.insertId
         alunoResps.push(newAlunoResp)
         res.status(201).json(newAlunoResp)
       }
     }
   )
 })
-
 // 削除
 app.delete('/resps_aluno/:id_resp_aluno', (req, res) => {
-  const alunoID = parseInt(req.params.id_resp_aluno)
+  const id_resp_aluno = parseInt(req.params.id_resp_aluno)
   const index = alunoResps.findIndex(alunoResp => alunoResp.id_resp_aluno === id_resp_aluno)
   if (index !== -1) {
-    connection.query('DELETE FROM Responsavel_Aluno WHERE id_resp_aluno=?', [alunoID, respID], err => {
+    connection.query('DELETE FROM Responsavel_Aluno WHERE id_resp_aluno=?', [id_resp_aluno], err => {
       if (err) {
         console.error('Aluno_Respテーブル - MySQLからのデータ削除エラー: ' + err)
         res.status(500).json({ message: '削除できませんでした' })
@@ -603,7 +603,7 @@ app.post('/notas_faltas', (req, res) => {
   connection.query(
     'INSERT INTO Notas_faltas (id_disciplina, id_aluno, n1, AI, AP, faltas, academic_year, data_matricula, semestre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
-      newNota.id_disciplina ,
+      newNota.id_disciplina,
       newNota.id_aluno,
       newNota.n1,
       newNota.AI,
@@ -677,6 +677,21 @@ app.delete('/notas_faltas/:id_notas_faltas', (req, res) => {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
+// 生徒IDに関連する成績や欠席情報を取得するエンドポイントを追加
+app.get('/alunos/:id_aluno/notas_faltas', (req, res) => {
+  const id_aluno = parseInt(req.params.id_aluno);
+  // 生徒IDに関連する成績や欠席情報を取得するクエリを実行
+  connection.query('SELECT * FROM Notas_faltas WHERE id_aluno = ?', [id_aluno], (err, results) => {
+    if (err) {
+      console.error('Notasテーブルでエラー発生: ' + err);
+      res.status(500).json({ message: 'エラーが発生しました' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
 
 // Eventoのサーバー管理に関わる部分
 // Eventoテーブルのデータ取得
@@ -726,8 +741,8 @@ app.put('/eventos/:id_evento', (req, res) => {
   const index = eventos.findIndex(evento => evento.id_evento === id_evento)
   if (index !== -1) {
     connection.query(
-      'UPDATE Evento SET nome_evento=?, link_evento=?, date_evento=? WHERE id_evento=?',
-      [updatedEvento.nome_evento, updatedEvento.link_evento, updatedEvento.date_evento, id_evento],
+      'UPDATE Evento SET nome_evento=?, link_evento=?, data_evento=? WHERE id_evento=?',
+      [updatedEvento.nome_evento, updatedEvento.link_evento, updatedEvento.data_evento, id_evento],
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
@@ -1118,38 +1133,14 @@ app.delete('/prof_disciplinas/:id_prof_disc', (req, res) => {
   }
 });
 
-// サーバーサイドのルートを変更
-app.get('/alunos/turma/:id_turma', (req, res) => {
-  const turmaID = parseInt(req.params.id_turma);
-  const alunosTurma = alunos.filter(aluno => aluno.id_turma === turmaID); // 特定のTurmaに関連するAlunoをフィルタリング
-  res.json(alunosTurma);
-});
 
-// サーバーサイドのルートを変更
-app.get('/turmas/:id_turma/disciplinas', (req, res) => {
-  const turmaID = parseInt(req.params.id_turma);
-  // TurmaとDisciplinaを結合して、特定のTurmaに関連するDisciplinaを取得
-  const query = `SELECT Disciplina.id_disciplina, Disciplina.disciplina FROM Disciplina 
-                 INNER JOIN Turma_Disciplina ON Disciplina.id_disciplina = Turma_Disciplina.id_disciplina 
-                 WHERE Turma_Disciplina.id_turma = ?`;
-  connection.query(query, [turmaID], (err, results) => {
-    if (err) {
-      console.error('Turmaに関連するDisciplinaの取得エラー:', err);
-      res.status(500).json({ message: 'Turmaに関連するDisciplinaを取得できませんでした' });
-    } else {
-      res.json(results);
-    }
-  });
-});
-
-// サーバーサイドのルートを変更
-app.get('/notas_faltas/disciplina/:id_disciplina', (req, res) => {
-  const disciplinaID = parseInt(req.params.id_disciplina);
-  const notasDisciplina = notas.filter(nota => nota.id_disciplina === disciplinaID); // 特定のDisciplinaに関連するNotas_faltasをフィルタリング
-  res.json(notasDisciplina);
-});
 
 
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました / Servidor iniciado na porta ${port}`)
 })
+
+
+
+
+

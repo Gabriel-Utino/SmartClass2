@@ -9,7 +9,7 @@ function displayEvento(evento) {
               <td>${evento.id_evento}</td>
               <td>${evento.nome_evento}</td>
               <td>${evento.link_evento}</td>
-              <td>${formatDate(evento.date_evento)}</td>
+              <td>${formatDate(evento.data_evento)}</td>
               <td>
                 <button onclick="updateEvento(${evento.id_evento})">Editar</button>
                 <button onclick="deleteEvento(${evento.id_evento})">Excluir</button>
@@ -40,7 +40,7 @@ document.getElementById('addEventoForm').addEventListener('submit', function (ev
     body: JSON.stringify({
       nome_evento: eventoNome,
       link_evento: eventoLink,
-      date_evento: eventoDate
+      data_evento: eventoDate
     })
   })
     .then(response => response.json())
@@ -56,7 +56,7 @@ function updateEvento(id) {
     .then(response => response.json())
     .then(data => {
       // 日付のフォーマット
-      const formattedBirthDate = formatDate(data.date_evento)
+      const formattedBirthDate = formatDate(data.data_evento)
 
       document.getElementById('editEventoId').value = data.id_evento
       document.getElementById('editEventoNome').value = data.nome_evento
@@ -81,7 +81,7 @@ document.getElementById('updateEventoForm').addEventListener('submit', function 
     body: JSON.stringify({
       nome_evento: eventoNome,
       link_evento: eventoLink,
-      date_evento: eventoDate
+      data_evento: eventoDate
     })
   })
     .then(response => response.json())

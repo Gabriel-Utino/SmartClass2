@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Editar Notas da Disciplina</title>
+  <title></title>
   <!-- 追加：外部のスタイルシート -->
   <!-- <link rel="stylesheet" href="styles/professores.css" /> -->
   <!-- <link rel="stylesheet" href="styles/style.css" /> -->
@@ -18,6 +18,7 @@
 </head>
 
 <body>
+
   <!-- ナビゲーションバーのコードを貼り付け -->
   <nav class="navbar navbar-dark bg-dark fixed-top" style="background-color: transparent">
     <div class="container-fluid">
@@ -50,7 +51,7 @@
                 Aluno
               </a>
               <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="VeriNotasFaltas.html">Notas</a></li>
+                <li><a class="dropdown-item" href="VeriNotas.html">Notas</a></li>
                 <li><a class="dropdown-item" href="VeriFaltas.html">Faltas</a></li>
                 <!-- <li>
                   <hr class="dropdown-divider">
@@ -94,33 +95,21 @@
     </div>
   </nav>
 
+
+
+
+
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
-  <div class="container mt-5">
-    <h2 class="mb-4">Editar Notas da Disciplina</h2>
-    <form id="gradeForm">
-      <div class="mb-3">
-        <label for="nomeDisciplina" class="form-label">Disciplina</label>
-        <input type="text" class="form-control" id="nomeDisciplina" readonly>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FSao_Paulo&bgcolor=%23A79B8E&showTitle=0&src=Z2FicmllbC51dGlub0B1c2Nzb25saW5lLmNvbS5icg&src=Y19jbGFzc3Jvb20wOWFlMjE4MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zYjJiYzliY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kOWE5ZDhiMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zY2UxN2NhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zNWI1MmU3ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb201MGQ4ZDRmMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21jYTU4NWVjM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb201NGEzOWI1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%23c26401&color=%230047a8&color=%23137333&color=%23202124&color=%230B8043&color=%23202124&color=%230047a8&color=%23007b83&color=%230047a8&color=%2333B679" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
       </div>
-      <div class="mb-3">
-        <label for="horario" class="form-label">Horário</label>
-        <input type="text" class="form-control" id="horario" readonly>
-      </div>
-      <div class="mb-3">
-        <label for="notaN1" class="form-label">Nota N1</label>
-        <input type="number" class="form-control" id="notaN1">
-      </div>
-      <div class="mb-3">
-        <label for="notaAP" class="form-label">Nota AP</label>
-        <input type="number" class="form-control" id="notaAP">
-      </div>
-      <div class="mb-3">
-        <label for="notaAI" class="form-label">Nota AI</label>
-        <input type="number" class="form-control" id="notaAI">
-      </div>
-      <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+    </div>
   </div>
+
+
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
@@ -134,7 +123,7 @@
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-  <script src="../js/disciplina_aplicarNota.js">
+  <script src="../js">
   </script>
 </body>
 

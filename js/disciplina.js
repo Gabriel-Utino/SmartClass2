@@ -1,28 +1,21 @@
 const apiUrlDisciplina = 'http://localhost:3000/disciplinas'
-const apiUrlProfessor = 'http://localhost:3000/professores'
 
 // リストを表示
 function displayDisciplina(disciplina) {
   const disciplinaList = document.getElementById('disciplinaList')
   disciplinaList.innerHTML = ''
   disciplina.forEach(disciplina => {
-    // 情報を取得
-    fetch(`${apiUrlProfessor}/${disciplina.id_prof}`)
-      .then(response => response.json())
-      .then(professor => {
-        const disciplinaElement = document.createElement('tr')
-        disciplinaElement.innerHTML = `
-              <td>${disciplina.id_disciplina}</td>
-              <td>${disciplina.disciplina}</td>
-              <td>${professor.nome_prof}</td>
-              <td>
-                <button onclick="updateDisciplina(${disciplina.id_disciplina})">Editar</button>
-                <button onclick="deleteDisciplina(${disciplina.id_disciplina})">Excluir</button>
-              </td>
-          `
-        disciplinaList.appendChild(disciplinaElement)
-      })
-      .catch(error => console.error('Erro:', error))
+    const disciplinaElement = document.createElement('tr')
+    disciplinaElement.innerHTML = `
+          <td>${disciplina.id_disciplina}</td>
+          <td>${disciplina.disciplina}</td>
+          <td>${disciplina.horario}</td>
+          <td>
+            <button onclick="updateDisciplina(${disciplina.id_disciplina})">Editar</button>
+            <button onclick="deleteDisciplina(${disciplina.id_disciplina})">Excluir</button>
+          </td>
+      `
+    disciplinaList.appendChild(disciplinaElement)
   })
 }
 
@@ -38,7 +31,7 @@ function getDisciplina() {
 document.getElementById('addDisciplinaForm').addEventListener('submit', function (event) {
   event.preventDefault()
   const disciplinaName = document.getElementById('disciplinaName').value
-  const disciplinaIdProf = document.getElementById('disciplinaIdProf').value
+  const disciplinaHorario = document.getElementById('disciplinaHorario').value
 
   fetch(apiUrlDisciplina, {
     method: 'POST',
@@ -47,7 +40,7 @@ document.getElementById('addDisciplinaForm').addEventListener('submit', function
     },
     body: JSON.stringify({
       disciplina: disciplinaName,
-      id_prof: disciplinaIdProf
+      horario: disciplinaHorario
     })
   })
     .then(response => response.json())
@@ -65,7 +58,7 @@ function updateDisciplina(id) {
     .then(data => {
       document.getElementById('editDisciplinaId').value = data.id_disciplina
       document.getElementById('editDisciplinaName').value = data.disciplina
-      document.getElementById('editDisciplinaIdProf').value = data.id_prof
+      document.getElementById('editDisciplinaHorario').value = data.horario
     })
     .catch(error => console.error('Erro:', error))
 }
@@ -75,7 +68,7 @@ document.getElementById('updateDisciplinaForm').addEventListener('submit', funct
   event.preventDefault()
   const disciplinaId = document.getElementById('editDisciplinaId').value
   const disciplinaName = document.getElementById('editDisciplinaName').value
-  const disciplinaIdProf = document.getElementById('editDisciplinaIdProf').value
+  const disciplinaHorario = document.getElementById('editDisciplinaHorario').value
 
   fetch(`${apiUrlDisciplina}/${disciplinaId}`, {
     method: 'PUT',
@@ -84,7 +77,7 @@ document.getElementById('updateDisciplinaForm').addEventListener('submit', funct
     },
     body: JSON.stringify({
       disciplina: disciplinaName,
-      id_prof: disciplinaIdProf
+      horario: disciplinaHorario
     })
   })
     .then(response => response.json())
@@ -113,7 +106,7 @@ function cancelEdit() {
 }
 
 // サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
-function populateProf() {
+/* function populateProf() {
   fetch(apiUrlProfessor)
     .then(response => response.json())
     .then(data => {
@@ -143,3 +136,4 @@ function populateProf() {
 
 // ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateProf)
+ */

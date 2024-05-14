@@ -110,8 +110,8 @@
           <tr>
             <th>ID</th>
             <th>Nome da Turma</th>
-            <th>Periodo</th>
-            <th>ID do Professor</th>
+            <th>Ano</th>
+            <th>Semestre</th>
             <th>Option</th>
           </tr>
         </thead>
@@ -133,17 +133,17 @@
             <input type="text" class="form-control" id="turmaName" placeholder="Nome da Turma" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="turmaPeriodo" placeholder="Periodo" required>
+            <input type="text" class="form-control" id="turmaAno" placeholder="Ano" required>
           </div>
-          <!-- <div class="form-group">
-            <input type="text" class="form-control" id="turmaIdProf" placeholder="ID do Professor" required>
-          </div> -->
-          
           <div class="form-group">
-            <select class="form-control" id="turmaIdProf" required>
+            <input type="text" class="form-control" id="turmaSemestre" placeholder="Semestre" required>
+          </div>
+          
+          <!-- <div class="form-group">
+            <select class="form-control" id="turmaAno" required>
               <option value="" disabled selected>Escolha a escola</option>
             </select>
-          </div>
+          </div> -->
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
@@ -159,16 +159,16 @@
             <input type="text" class="form-control" id="editTurmaName" placeholder="Nome da Turma" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editTurmaPeriodo" placeholder="Periodo" required>
+            <input type="text" class="form-control" id="editTurmaAno" placeholder="Ano" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="editTurmaSemestre" placeholder="Semestre" required>
           </div>
           <!-- <div class="form-group">
-            <input type="text" class="form-control" id="editTurmaIdProf" placeholder="ID do Professor" required>
-          </div> -->
-          <div class="form-group">
-            <select class="form-control" id="editTurmaIdProf" required>
+            <select class="form-control" id="editTurmaAno" required>
               <option value="" disabled selected>Escolha a escola</option>
             </select>
-          </div>
+          </div> -->
 
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>

@@ -74,8 +74,9 @@ document.getElementById('addEventoProfessorForm').addEventListener('submit', fun
     .catch(error => console.error('Erro:', error))
 })
 
-function deleteEventoProfessor(professorId, eventoId) {
-  fetch(`${apiUrl}/${professorId}/${eventoId}`, {
+// 削除
+function deleteEventoProfessor(id_evento) {
+  fetch(`${apiUrl}/${id_evento}`, {
     method: 'DELETE'
   })
     .then(response => response.json())

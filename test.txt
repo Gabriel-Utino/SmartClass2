@@ -109,7 +109,7 @@ CREATE TABLE Prof_Disciplina (
     id_disciplina INT,
     FOREIGN KEY (id_prof) REFERENCES Professor(id_prof),
     FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id_disciplina)
-);
+); ページがまだできてない
 
 CREATE TABLE Turma_Disciplina (
     id_turma_disc INT AUTO_INCREMENT PRIMARY KEY,
@@ -206,6 +206,12 @@ INSERT INTO Turma_Disciplina (id_turma, id_disciplina) VALUES
 (3, 3),
 (4, 4),
 (5, 5);
+INSERT INTO Turma_Disciplina (id_turma, id_disciplina) VALUES
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(2, 3);
 
 -- 仮のデータ
 INSERT INTO Prof_Disciplina (id_prof, id_disciplina) VALUES
@@ -218,12 +224,13 @@ INSERT INTO Prof_Disciplina (id_prof, id_disciplina) VALUES
 -- 成績と欠席データを挿入するスクリプト
 INSERT INTO Notas_faltas (id_disciplina, id_aluno, N1, AI, AP, faltas, academic_year, data_matricula, semestre) VALUES
  (1, 1, 8.5, 7.5, 9.0, 2, 2024, '2024-01-15', 1),
+ (1, 2, 7.0, 6.5, 8.5, 2, 2024, '2024-02-05', 1),
+ (1, 3, 7.0, 6.5, 8.5, 2, 2024, '2024-02-05', 1),
+ (1, 4, 7.0, 6.5, 8.5, 2, 2024, '2024-02-05', 1),
+ (1, 5, 7.0, 6.5, 8.5, 2, 2024, '2024-02-05', 1),
+ (2, 1, 6.0, 7.5, 8.0, 1, 2024, '2024-01-15', 1),
  (2, 2, 7.0, 8.0, 6.5, 3, 2024, '2024-01-20', 1),
+ (3, 2, 8.0, 9.0, 7.5, 2, 2024, '2024-01-20', 1),
  (3, 3, 9.0, 8.5, 7.0, 1, 2024, '2024-01-25', 1),
  (4, 4, 6.5, 7.0, 8.0, 4, 2024, '2024-01-30', 1),
- (5, 5, 8.0, 9.0, 8.5, 0, 2024, '2024-02-05', 1),
- (2, 1, 6.0, 7.5, 8.0, 1, 2024, '2024-01-15', 1),
- (3, 2, 8.0, 9.0, 7.5, 2, 2024, '2024-01-20', 1),
- (4, 3, 7.5, 8.0, 9.0, 3, 2024, '2024-01-25', 1),
- (5, 4, 9.0, 8.5, 7.0, 0, 2024, '2024-01-30', 1),
- (1, 5, 7.0, 6.5, 8.5, 2, 2024, '2024-02-05', 1);
+ (5, 5, 8.0, 9.0, 8.5, 0, 2024, '2024-02-05', 1);

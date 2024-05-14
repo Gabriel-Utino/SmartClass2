@@ -2,87 +2,96 @@ const apiUrlTurma = 'http://localhost:3000/turmas'
 const apiUrlDisciplina = 'http://localhost:3000/disciplinas'
 const apiUrlAluno = 'http://localhost:3000/alunos'
 
-
-// Turmaの選択肢を追加する関数
-function populateTurmas() {
-  // リクエストを送信してTurmaを取得
+// サーバーからTurmaのリストを取得する関数
+function getTurmas() {
   fetch(apiUrlTurma)
     .then(response => response.json())
-    .then(turmas => {
-      const selectTurma = document.getElementById('selectTurma')
-
-      // すでに選択肢があればクリア
-      selectTurma.innerHTML = '<option value="" disabled selected>Escolha a Turma</option>'
-
-      // 取得したTurmaを選択肢として追加
-      turmas.forEach(turma => {
-        const option = document.createElement('option')
-        option.value = turma.id_turma
-        option.textContent = `${turma.nome_turma} - Ano ${turma.ano} - Semestre ${turma.semestre}`
-        selectTurma.appendChild(option)
-      })
-    })
-    .catch(error => console.error('Turmasの取得エラー:', error))
-}
-
-// Turmaが選択されたときに呼び出される関数
-function populateAlunos() {
-  const turmaId = document.getElementById('selectTurma').value; // 選択されたTurmaのIDを取得
-
-  // サーバーからAlunoを取得
-  fetch(`http://localhost:3000/alunos/turma/${turmaId}`)
-    .then(response => response.json())
-    .then(alunos => {
-      const alunosList = document.getElementById('alunosList');
-
-      // 一旦リストをクリア
-      alunosList.innerHTML = '';
-
-      // 取得したAlunoをリストとして表示
-      alunos.forEach(aluno => {
-        const listItem = document.createElement('li');
-        listItem.className = 'list-group-item';
-        listItem.textContent = aluno.nome_aluno;
-        alunosList.appendChild(listItem);
+    .then(data => {
+      const selectTurma = document.getElementById('selectTurma');
+      // 取得したTurmaリストをセレクトボックスに追加
+      data.forEach(turma => {
+        const option = document.createElement('option');
+        option.value = turma.id_turma;
+        option.textContent = `${turma.nome_turma} - Ano ${turma.ano} - Semestre ${turma.semestre}`;
+        selectTurma.appendChild(option);
       });
     })
-    .catch(error => console.error('Alunosの取得エラー:', error));
+    .catch(error => console.error('Turmaの取得中にエラーが発生しました:', error));
 }
 
-function populateDisciplina() {
-  const turmaId = document.getElementById('selectTurma').value; // 選択されたTurmaのIDを取得
+// Turmaが選択されたときの処理
+document.getElementById('selectTurma').addEventListener('change', function() {
+  const selectedTurmaId = this.value;
+  if (!selectedTurmaId) return; // 選択されたTurmaがない場合は何もしない
+
+  // 選択されたTurmaに関連するDisciplinaを取得する関数
+  function getDisciplinas(selectedTurmaId) {
+    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/disciplinas`)
+      .then(response => response.json())
+      .then(data => {
+        const selectDisciplina = document.getElementById('selectDisciplina');
+        // セレクトボックスをクリア
+        selectDisciplina.innerHTML = '';
+        // 取得したDisciplinaリストをセレクトボックスに追加
+        data.forEach(disciplina => {
+          const option = document.createElement('option');
+          option.value = disciplina.id_disciplina;
+          option.textContent = disciplina.disciplina;
+          selectDisciplina.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Disciplinaの取得中にエラーが発生しました:', error));
+  }
 
   // 選択されたTurmaに関連するDisciplinaを取得
-  fetch(`http://localhost:3000/turmas/${turmaId}/disciplinas`)
-    .then(response => response.json())
-    .then(disciplinas => {
-      const selectDisciplina = document.getElementById('selectDisciplina');
+  getDisciplinas(selectedTurmaId);
+});
 
-      // セレクトボックスの選択肢をリセット
-      selectDisciplina.innerHTML = '<option value="" disabled selected>Escolha a Disciplina</option>';
+// Turmaが選択されたときの処理
+document.getElementById('selectTurma').addEventListener('change', function() {
+  const selectedTurmaId = this.value;
+  if (!selectedTurmaId) return; // 選択されたTurmaがない場合は何もしない
 
-      // 取得したDisciplinaをセレクトボックスの選択肢として追加
-      disciplinas.forEach(disciplina => {
-        const option = document.createElement('option');
-        option.value = disciplina.id_disciplina;
-        option.textContent = disciplina.disciplina;
-        selectDisciplina.appendChild(option);
-      });
-    })
-    .catch(error => console.error('データ取得エラー:', error));
-}
+  // 選択されたTurmaに関連するAlunoを取得する関数
+  function getAlunos(selectedTurmaId) {
+    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/alunos`)
+      .then(response => response.json())
+      .then(data => {
+        // 取得したAlunoリストを使って何かを行う（例：リスト表示など）
+        console.log('Alunos:', data);
+      })
+      .catch(error => console.error('Alunoの取得中にエラーが発生しました:', error));
+  }
+
+  // 選択されたTurmaに関連するAlunoを取得
+  getAlunos(selectedTurmaId);
+});
+
+// Disciplinaが選択されたときの処理
+document.getElementById('selectDisciplina').addEventListener('change', function() {
+  const selectedTurmaId = document.getElementById('selectTurma').value;
+  const selectedDisciplinaId = this.value;
+  if (!selectedTurmaId || !selectedDisciplinaId) return; // 選択されたTurmaまたはDisciplinaがない場合は何もしない
+
+  // 選択されたTurmaとDisciplinaに関連するNotas_faltasを取得する関数
+  function getNotasFaltas(selectedTurmaId, selectedDisciplinaId) {
+    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/disciplinas/${selectedDisciplinaId}/notas_faltas`)
+      .then(response => response.json())
+      .then(data => {
+        // 取得したNotas_faltasを使って何かを行う（例：入力フィールドを表示など）
+        console.log('Notas_faltas:', data);
+      })
+      .catch(error => console.error('Notas_faltasの取得中にエラーが発生しました:', error));
+  }
+
+  // 選択されたTurmaとDisciplinaに関連するNotas_faltasを取得
+  getNotasFaltas(selectedTurmaId, selectedDisciplinaId);
+});
+
+
+// ページ読み込み時にTurmaのリストを取得
+document.addEventListener('DOMContentLoaded', getTurmas);
 
 
 
 
-
-
-
-// Turmaが選択されたときにpopulateAlunos()を呼び出すようにする
-document.getElementById('selectTurma').addEventListener('change', populateAlunos);
-// ページが読み込まれたときに一度データを取得してセレクトボックスを初期化
-document.addEventListener('DOMContentLoaded', populateDisciplina);
-// ページ読み込み時にTurmaを取得して選択肢を追加
-document.addEventListener('DOMContentLoaded', populateTurmas)
-// Turmaを選択したときにAlunoを取得してリスト化
-document.getElementById('selectTurma').addEventListener('change', populateAlunos);

@@ -1,4 +1,4 @@
-const apiUrlAlunoResp = 'http://localhost:3000/aluno_resps'
+const apiUrlAlunoResp = 'http://localhost:3000/resps_aluno'
 const apiUrlAluno = 'http://localhost:3000/alunos'
 const apiUrlResp = 'http://localhost:3000/responsaveis'
 
@@ -15,7 +15,7 @@ function displayAlunoResp(alunoResp) {
               <td>${alunoName}</td>
               <td>${respName}</td>
               <td>
-                <button onclick="deleteAlunoResp(${alunoResp.id_aluno}, ${alunoResp.id_resp})">Excluir</button>
+                <button onclick="deleteAlunoResp(${alunoResp.id_resp_aluno})">Excluir</button>
               </td>
           `
         alunoRespList.appendChild(alunoRespElement)
@@ -41,7 +41,6 @@ function getAlunoName(id_aluno) {
 }
 // Respの名前を取得
 function getProfName(id_resp) {
-  console.log(id_resp)
   return fetch(`${apiUrlResp}/${id_resp}`)
     .then(response => response.json())
     .then(data => data.nome_resp)
@@ -51,10 +50,8 @@ function getProfName(id_resp) {
 // 追加
 document.getElementById('addAlunoRespForm').addEventListener('submit', function (event) {
   event.preventDefault()
-  const alunoId1 = document.getElementById('alunoId').value
-  alunoId = parseInt(alunoId1)
-  const respId1 = document.getElementById('respId').value
-  respId = parseInt(respId1)
+  const alunoId = parseInt(document.getElementById('alunoId').value)
+  const respId = parseInt(document.getElementById('respId').value)
   
   fetch(apiUrlAlunoResp, {
     method: 'POST',
@@ -75,8 +72,8 @@ document.getElementById('addAlunoRespForm').addEventListener('submit', function 
 })
 
 // 削除
-function deleteAlunoResp(alunoId, respId) {
-  fetch(`${apiUrlAlunoResp}/${alunoId}/${respId}`, {
+function deleteAlunoResp(id_resp_aluno) {
+  fetch(`${apiUrlAlunoResp}/${id_resp_aluno}`, {
     method: 'DELETE'
   })
     .then(response => response.json())

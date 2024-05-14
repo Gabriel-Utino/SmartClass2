@@ -114,7 +114,6 @@
             <th>Endereço</th>
             <th>Telefone</th>
             <th>Email</th>
-            <th>ID da Escola</th>
             <th>Option</th>
           </tr>
         </thead>
@@ -149,15 +148,15 @@
           <div class="form-group">
             <input type="email" class="form-control" id="responsavelEmail" placeholder="Email do Responsável" required>
           </div>
-          <!-- <div class="form-group">
-            <input type="text" class="form-control" id="responsavelIdEscola" placeholder="ID da Escola" required>
-          </div> -->
-          
           <div class="form-group">
+            <input type="senha" class="form-control" id="responsavelSenha" placeholder="Senha do Responsável" required>
+          </div>
+          
+          <!-- <div class="form-group">
             <select class="form-control" id="responsavelIdEscola" required>
               <option value="" disabled selected>Escolha a escola</option>
             </select>
-          </div>
+          </div> -->
 
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
@@ -189,15 +188,12 @@
             <input type="email" class="form-control" id="editResponsavelEmail" placeholder="Email do Responsável"
               required>
           </div>
-          <!-- <div class="form-group">
-            <input type="text" class="form-control" id="editResponsavelIdEscola" placeholder="ID da Escola" required>
-          </div> -->
-          
+          <!-- 
           <div class="form-group">
             <select class="form-control" id="editResponsavelIdEscola" required>
               <option value="" disabled selected>Escolha a escola</option>
             </select>
-          </div>
+          </div> -->
 
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>
