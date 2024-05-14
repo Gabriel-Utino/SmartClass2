@@ -28,7 +28,7 @@ function displayNota(nota) {
 
 function getNotasByAluno() {
   // ログインした生徒のIDを取得する処理が必要 loginUserID
-  const id_aluno = 1
+  const id_aluno = 3
   fetch(`${apiUrlAluno}/${id_aluno}`)
     .then(response => response.json())
     .then(aluno => {

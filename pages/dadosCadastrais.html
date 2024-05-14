@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apricar notas</title>
+  <title>Dados Cadastrais</title>
   <!-- 追加：外部のスタイルシート -->
   <!-- <link rel="stylesheet" href="styles/professores.css" /> -->
   <!-- <link rel="stylesheet" href="styles/style.css" /> -->
@@ -18,6 +18,7 @@
 </head>
 
 <body>
+
   <!-- ナビゲーションバーのコードを貼り付け -->
   <nav class="navbar navbar-dark bg-dark fixed-top" style="background-color: transparent">
     <div class="container-fluid">
@@ -103,31 +104,61 @@
 
 
 
+
+
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-6">
-      <h1>Apricar notas</h1>
-      <!-- セレクトボックスを追加する場所 -->
-      <select class="form-control" id="selectTurma" required>
-        <option value="" disabled selected>Escolha a Turma</option>
-      </select>
-      <!-- 新しいセレクトボックス -->
-      <select class="form-control" id="selectDisciplina" required>
-        <option value="" disabled selected>Escolha a Disciplina</option>
-      </select>
-    </div>
-    <div class="col-md-6">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-header">
+            Aluno Profile
+          </div>
+          <div class="card-body">
+            <img class="img-fluid rounded mx-auto d-block" alt="Aluno Photo">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Name</th>
+                  <td id="aluno-name"></td>
+                </tr>
+                <tr>
+                  <th scope="row">CPF</th>
+                  <td id="aluno-cpf"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Address</th>
+                  <td id="aluno-address"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Phone</th>
+                  <td id="aluno-phone"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Email</th>
+                  <td id="aluno-email"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Date of Birth</th>
+                  <td id="aluno-dob"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Registration Number</th>
+                  <td id="aluno-ra"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Date of Registration</th>
+                  <td id="aluno-registration-date"></td>
+                </tr>
+              </tbody>
+            </table>
+            <button onclick="location.href='alterarCadastro.html'" type="submit" class="btn btn-primary">Alterar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="col-md-6">
-      <ul class="list-group" id="alunosList">
-        <!-- Alunos will be dynamically added here -->
-      </ul>
-    </div>
-  </div>
-</div>
+
 
 
 
@@ -142,7 +173,7 @@
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-  <script src="../js/selectTurma_notas.js">
+  <script src="../js/dadosCadastrais.js">
   </script>
 </body>
 
