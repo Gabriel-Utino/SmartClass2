@@ -40,24 +40,24 @@
           </form>
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="home.html">Home</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                Aluno
+                Notas e Faltas
               </a>
               <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="#">Notas</a></li>
-                <li><a class="dropdown-item" href="#">Faltas</a></li>
+                <li><a class="dropdown-item" href="VeriNotas.html">Notas</a></li>
+                <li><a class="dropdown-item" href="VeriFaltas.html">Faltas</a></li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Calendario</a>
+              <a class="nav-link" href="Calendario.html">Calendario</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#">Financeiro</a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="dadosCadastrais.html">Dados Cadastrais</a>
             </li>
@@ -98,7 +98,9 @@
           </ul>
         </div>
       </div>
-      <img src="../icons/smartclass.png" width="50" height="50" class="mx-auto d-block" alt="smartclassIcon">
+      <a href="home.html" class="mx-auto d-block">
+        <img src="../icons/smartclass.png" alt="smartclassIcon" class="img-home">
+      </a>
     </div>
   </nav>
 
@@ -127,11 +129,11 @@
                   <td id="aluno-cpf"></td>
                 </tr>
                 <tr>
-                  <th scope="row">Address</th>
+                  <th scope="row">Endereco</th>
                   <td id="aluno-address"></td>
                 </tr>
                 <tr>
-                  <th scope="row">Phone</th>
+                  <th scope="row">Telefone</th>
                   <td id="aluno-phone"></td>
                 </tr>
                 <tr>
@@ -139,15 +141,15 @@
                   <td id="aluno-email"></td>
                 </tr>
                 <tr>
-                  <th scope="row">Date of Birth</th>
+                  <th scope="row">Data de naci</th>
                   <td id="aluno-dob"></td>
                 </tr>
                 <tr>
-                  <th scope="row">Registration Number</th>
+                  <th scope="row">RA</th>
                   <td id="aluno-ra"></td>
                 </tr>
                 <tr>
-                  <th scope="row">Date of Registration</th>
+                  <th scope="row">Data de matricula</th>
                   <td id="aluno-registration-date"></td>
                 </tr>
               </tbody>

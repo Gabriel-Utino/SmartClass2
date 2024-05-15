@@ -109,7 +109,7 @@ CREATE TABLE Prof_Disciplina (
     id_disciplina INT,
     FOREIGN KEY (id_prof) REFERENCES Professor(id_prof),
     FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id_disciplina)
-); ページがまだできてない
+);
 
 CREATE TABLE Turma_Disciplina (
     id_turma_disc INT AUTO_INCREMENT PRIMARY KEY,
