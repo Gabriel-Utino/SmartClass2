@@ -512,6 +512,19 @@ app.delete('/alunos/:id_aluno', (req, res) => {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
+// Alunoテーブルのdata_matriculaの最小値と最大値を取得するエンドポイント
+app.get('/alunos/data_matricula_range', (req, res) => {
+  console.log('Received request for data matricula range'); // ログ追加
+  connection.query('SELECT MIN(data_matricula) as start, MAX(data_matricula) as end FROM Aluno', (err, results) => {
+    if (err) {
+      console.error('Alunoテーブルでエラー発生: ' + err);
+      res.status(500).json({ message: 'エラーが発生しました' });
+    } else {
+      res.json(results[0]);
+    }
+  });
+});
+
 
 // Responsavel_Alunoのサーバー管理に関わる部分
 // Responsavel_Alunoテーブルのデータ取得

@@ -2,6 +2,21 @@ const apiUrlNotasFaltas = 'http://localhost:3000/notas_faltas'
 const apiUrlDisciplina = 'http://localhost:3000/disciplinas'
 const apiUrlAluno = 'http://localhost:3000/alunos'
 
+
+function populateAnoSelect(data_matricula) {
+  const selectAno = document.getElementById('selectAno');
+  const currentYear = new Date().getFullYear(); // 現在の年を取得
+  const startYear = new Date(data_matricula).getFullYear();
+
+  // 選択肢を生成
+  for (let year = startYear; year <= currentYear; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.text = year;
+    selectAno.appendChild(option);
+  }
+}
+
 function displayNota(nota) {
   const notaList = document.getElementById('notaList')
   notaList.innerHTML = ''
@@ -14,9 +29,9 @@ function displayNota(nota) {
         notaElement.innerHTML = `
               <td>${nota.id_notas_faltas}</td>
               <td>${disciplina.disciplina}</td>
-              <td>${nota.N1}</td>
-              <td>${nota.AI}</td>
-              <td>${nota.AP}</td>
+              <td>${nota.N1 !== null ? nota.N1 : 0}</td>
+              <td>${nota.AI !== null ? nota.AI : 0}</td>
+              <td>${nota.AP !== null ? nota.AP : 0}</td>
               <td>${nota.academic_year}</td>
               <td>${nota.semestre}</td>
           `
@@ -28,7 +43,8 @@ function displayNota(nota) {
 
 function getNotasByAluno() {
   // ログインした生徒のIDを取得する処理が必要 loginUserID
-  const id_aluno = 3
+  const id_aluno = 1
+
   fetch(`${apiUrlAluno}/${id_aluno}`)
     .then(response => response.json())
     .then(aluno => {
@@ -37,45 +53,42 @@ function getNotasByAluno() {
         .then(response => response.json())
         .then(data => {
           notas = data;
-          displayNota(notas)
-          console.log(notas)
+          displayNota(notas);
+          populateAnoSelect(aluno.data_matricula); 
         })
         .catch(error => console.error('Erro:', error))
     })
     .catch(error => console.error('Erro:', error))
 }
 
-// ラジオボタンの変更時にリストをソートする関数
-function sortList() {
-  const sortValue = document.querySelector('input[name="sort"]:checked').value
-  const sortedNotas = notas.sort((a, b) => {
-    if (sortValue === 'disciplina') {
-      // 数値として比較
-      return a.id_disciplina - b.id_disciplina;
-    } else {
-      // その他の場合は文字列として比較
-      return a[sortValue] - b[sortValue];
-    }
-  })
-  displayNota(sortedNotas)
+function filterNotas() {
+  const ano = document.getElementById('selectAno').value;
+  const semestre = document.getElementById('selectSemestre').value;
+  const id_aluno = 1; // ログインした生徒のIDをここに設定
+
+  fetch(`${apiUrlAluno}/${id_aluno}/notas_faltas`)
+    .then(response => response.json())
+    .then(data => {
+      const filteredNotas = data.filter(nota => nota.academic_year == ano && nota.semestre == semestre);
+      displayNota(filteredNotas);
+    })
+    .catch(error => console.error('filter Erro:', error));
 }
 
+document.getElementById('filterButton').addEventListener('click', filterNotas);
 
-// ラジオボタンの変更イベントを監視し、ソートする関数を呼び出す
-const radioButtons = document.querySelectorAll('input[name="sort"]')
-radioButtons.forEach(button => {
-  button.addEventListener('change', sortList)
-})
+/* function populateAnoOptions() {
+  const selectAno = document.getElementById('selectAno');
+  const currentYear = new Date().getFullYear();
+  for (let i = currentYear - 5; i <= currentYear + 5; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.text = i;
+    selectAno.appendChild(option);
+  }
+} */
 
-getNotasByAluno()
 
-/* function getNotas() {
-  fetch(apiUrlNotasFaltas)
-    .then(response => response.json())
-    .then(data => displayNota(data))
-    .catch(error => console.error('Erro:', error));
-} 
-getNotas()*/
 
 // 日付のフォーマット関数
 function formatDate(dateString) {
@@ -85,3 +98,15 @@ function formatDate(dateString) {
   const day = String(date.getUTCDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
 }
+
+getNotasByAluno()
+
+
+/* function getNotas() {
+  fetch(apiUrlNotasFaltas)
+    .then(response => response.json())
+    .then(data => displayNota(data))
+    .catch(error => console.error('Erro:', error));
+} 
+getNotas()*/
+

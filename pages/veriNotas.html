@@ -111,22 +111,31 @@
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
   <div class="container">
     <h1>Notas</h1>
-    <!-- ラジオボタン -->
-    <div>
-      <!-- <input type="radio" id="disciplina" name="sort" value="disciplina">
-      <label for="disciplina">Disciplina</label> -->
 
-      <input type="radio" id="N1" name="sort" value="N1">
-      <label for="N1">N1</label>
-
-      <input type="radio" id="AI" name="sort" value="AI">
-      <label for="AI">AI</label>
-
-      <input type="radio" id="AP" name="sort" value="AP">
-      <label for="AP">AP</label>
-
-      <input type="radio" id="academic_year" name="sort" value="academic_year">
-      <label for="academic_year">Ano</label>
+    <div class="row align-items-end">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="selectAno">Ano:</label>
+          <select id="selectAno" class="form-control">
+            <!-- 年の選択肢を追加 -->
+            <option value="" selected>Selecione o ano</option>
+            <!-- 必要に応じて他の年も追加 -->
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="selectSemestre">Semestre:</label>
+          <select id="selectSemestre" class="form-control">
+            <option value="" selected>Selecione o semestre</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <button id="filterButton" class="btn btn-primary" style="margin-top: 32px;">Filtrar</button>
+      </div>
     </div>
 
     <div class="containerTable" style="overflow-y: auto; max-height: 400px;">
