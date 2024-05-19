@@ -25,7 +25,7 @@ CREATE TABLE Aluno (
     nascimento_aluno DATE,
     ra_aluno VARCHAR(255),
     data_matricula DATE,
-    foto MEDIUMBLOB,
+    foto VARCHAR(255),
     senha VARCHAR(255),
     id_turma INT,
     FOREIGN KEY (id_turma) REFERENCES Turma(id_turma)
@@ -241,5 +241,3 @@ INSERT INTO Notas_faltas (id_disciplina, id_aluno, N1, AI, AP, faltas, academic_
  (1, 3, 13, 1, 13, 2, 2024, '2024-02-05', 1),
  (1, 5, 15, 1, 15, 0, 2024, '2024-02-05', 2);
 
-
-##criar anotaçoes

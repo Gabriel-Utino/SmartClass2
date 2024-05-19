@@ -13,9 +13,9 @@ function displayAluno(aluno) {
       .then(turma => {
         // 画像を表示するためのimg要素を作成
         const img = document.createElement('img');
-        img.src = aluno.foto; // 画像のURLを設定
-        img.alt = 'Aluno Photo'; // 画像の代替テキストを設定
-        img.style.maxWidth = '100px'; // 画像の幅を制限
+        img.src = aluno.foto ? `../upload/${aluno.foto}` : '../upload/semFotos.png'; // 画像のURLを設定
+        img.alt = `Aluno Photo ${aluno.nome_aluno}`; // 画像の代替テキストを設定
+        img.classList.add('img-alunoMini'); // クラスを追加
 
         const alunoElement = document.createElement('tr')
         alunoElement.innerHTML = `
