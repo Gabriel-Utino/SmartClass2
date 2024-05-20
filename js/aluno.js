@@ -13,7 +13,7 @@ function displayAluno(aluno) {
       .then(turma => {
         // 画像を表示するためのimg要素を作成
         const img = document.createElement('img');
-        img.src = aluno.foto ? `../upload/${aluno.foto}` : '../upload/semFotos.png'; // 画像のURLを設定
+        img.src = aluno.foto ? `../../upload/${aluno.foto}` : '../../upload/semFotos.png'; // 画像のURLを設定
         img.alt = `Aluno Photo ${aluno.nome_aluno}`; // 画像の代替テキストを設定
         img.classList.add('img-alunoMini'); // クラスを追加
 
@@ -29,7 +29,7 @@ function displayAluno(aluno) {
               <td>${formatDate(aluno.nascimento_aluno)}</td>
               <td>${aluno.ra_aluno}</td>
               <td>${formatDate(aluno.data_matricula)}</td>
-              <td>${turma.id_turma}</td>
+              <td>${turma.nome_turma}</td>
               <td>
                 <button onclick="updateAluno(${aluno.id_aluno})">Editar</button>
                 <button onclick="deleteAluno(${aluno.id_aluno})">Excluir</button>

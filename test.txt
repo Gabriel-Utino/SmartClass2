@@ -123,6 +123,9 @@ CREATE TABLE Turma_Disciplina (
 
 
 
+
+
+
 -- データの挿入
 INSERT INTO Responsavel (nome_resp, cpf_resp, endereco_resp, telefone_resp, email_resp, senha_resp) VALUES
 ('John Doe', '12345678901', '123 Main St', '123-456-7890', 'john.doe@example.com', 'password123'),

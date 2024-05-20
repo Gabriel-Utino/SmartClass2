@@ -1149,6 +1149,70 @@ app.delete('/prof_disciplinas/:id_prof_disc', (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+// orgDisciTurmaで使用
+// 選択されたTurmaのDisciplinaを取得
+app.get('/turmas/:id_turma/disciplinas', (req, res) => {
+  const id_turma = parseInt(req.params.id_turma);
+  connection.query(
+    'SELECT d.id_disciplina, d.disciplina FROM Disciplina d INNER JOIN Turma_Disciplina td ON d.id_disciplina = td.id_disciplina WHERE td.id_turma = ?',
+    [id_turma],
+    (err, results) => {
+      if (err) {
+        console.error('Error fetching Disciplinas:', err);
+        res.status(500).json({ message: 'Disciplinasの取得に失敗しました' });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+// 選択されたTurmaのAlunoと複数のDisciplinaの間にNotas_faltasエントリを作成
+app.post('/assign-disciplinas', (req, res) => {
+  const { id_turma, id_disciplinas, academic_year, semestre } = req.body;
+
+  // Turmaに所属する全てのAlunoを取得
+  connection.query('SELECT id_aluno FROM Aluno WHERE id_turma = ?', [id_turma], (err, alunos) => {
+    if (err) {
+      console.error('Error fetching Alunos:', err);
+      res.status(500).json({ message: 'Alunoの取得に失敗しました' });
+      return;
+    }
+
+    // Notas_faltasエントリを作成
+    const data_matricula = new Date().toISOString().slice(0, 10);
+
+    id_disciplinas.forEach(id_disciplina => {
+      alunos.forEach(aluno => {
+        connection.query(
+          'INSERT INTO Notas_faltas (id_disciplina, id_aluno, academic_year, data_matricula, semestre) VALUES (?, ?, ?, ?, ?)',
+          [id_disciplina, aluno.id_aluno, academic_year, data_matricula, semestre],
+          (err) => {
+            if (err) {
+              console.error('Error creating Notas_faltas entry:', err);
+            }
+          }
+        );
+      });
+    });
+
+    res.json({ message: 'Disciplinasが選択されたTurmaのAlunoに適用されました' });
+  });
+});
+
+
+
+
+
+
+
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました / Servidor iniciado na porta ${port}`)
 })
