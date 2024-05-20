@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Turmaが選択されたときのイベントリスナーを追加
   turmaSelect.addEventListener('change', event => {
     const selectedTurmaId = event.target.value
-    disciplinaSelect.innerHTML = '<option value="">--選択してください--</option>'
+    disciplinaSelect.innerHTML = '<option value="">--selecione--</option>'
     disciplinaSelect.disabled = true
     assignDisciplinasButton.disabled = true
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('Error assigning Disciplina:', error)
         })
     } else {
-      alert('全てのフィールドを入力してください')
+      alert('Escreva todo')
     }
   })
 })

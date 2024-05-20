@@ -524,6 +524,20 @@ app.get('/alunos/data_matricula_range', (req, res) => {
     }
   });
 });
+// ターマに関連するアルノの取得
+app.get('/turmas/:id_turma/alunos', (req, res) => {
+  const turmaID = parseInt(req.params.id_turma);
+  // Turmaに関連するAlunoをデータベースからクエリして取得
+  connection.query('SELECT * FROM Aluno WHERE id_turma = ?', [turmaID], (err, results) => {
+    if (err) {
+      console.error('Turmaに関連するAlunoの取得中にエラーが発生しました: ' + err);
+      res.status(500).json({ message: 'Turmaに関連するAlunoを取得できませんでした' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 
 
 // Responsavel_Alunoのサーバー管理に関わる部分
@@ -1203,10 +1217,29 @@ app.post('/assign-disciplinas', (req, res) => {
       });
     });
 
-    res.json({ message: 'Disciplinasが選択されたTurmaのAlunoに適用されました' });
+    res.json({ message: 'Aplicado' });
   });
 });
 
+
+
+
+
+
+
+// faltasの適応するために
+// Disciplinaに関連するAlunosのデータ取得
+app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
+  const disciplinaID = parseInt(req.params.id_disciplina);
+  connection.query('SELECT * FROM Aluno WHERE id_disciplina = ?', [disciplinaID], (err, results) => {
+    if (err) {
+      console.error('Alunoデータ取得エラー: ' + err);
+      res.status(500).json({ message: 'データ取得エラー' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 
 

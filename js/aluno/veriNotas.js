@@ -27,7 +27,6 @@ function displayNota(nota) {
       .then(disciplina => {
         const notaElement = document.createElement('tr')
         notaElement.innerHTML = `
-              <td>${nota.id_notas_faltas}</td>
               <td>${disciplina.disciplina}</td>
               <td>${nota.N1 !== null ? nota.N1 : 0}</td>
               <td>${nota.AI !== null ? nota.AI : 0}</td>
