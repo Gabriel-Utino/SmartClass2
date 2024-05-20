@@ -1,97 +1,146 @@
-const apiUrlTurma = 'http://localhost:3000/turmas'
-const apiUrlDisciplina = 'http://localhost:3000/disciplinas'
-const apiUrlAluno = 'http://localhost:3000/alunos'
+// 初期化
+document.addEventListener('DOMContentLoaded', () => {
+  fetchTurmas()
+  populateYearSelect()
+})
 
-// サーバーからTurmaのリストを取得する関数
-function getTurmas() {
-  fetch(apiUrlTurma)
+// Turmas を取得しセレクトボックスを更新
+function fetchTurmas() {
+  fetch('http://localhost:3000/turmas')
     .then(response => response.json())
     .then(data => {
-      const selectTurma = document.getElementById('selectTurma');
-      // 取得したTurmaリストをセレクトボックスに追加
+      const turmaSelect = document.getElementById('turmaSelect')
       data.forEach(turma => {
-        const option = document.createElement('option');
-        option.value = turma.id_turma;
-        option.textContent = `${turma.nome_turma} - Ano ${turma.ano} - Semestre ${turma.semestre}`;
-        selectTurma.appendChild(option);
-      });
+        const option = document.createElement('option')
+        option.value = turma.id_turma
+        option.textContent = turma.nome_turma
+        turmaSelect.appendChild(option)
+      })
+      turmaSelect.disabled = false
     })
-    .catch(error => console.error('Turmaの取得中にエラーが発生しました:', error));
+    .catch(error => console.error('Error fetching Turmas:', error))
 }
 
-// Turmaが選択されたときの処理
-document.getElementById('selectTurma').addEventListener('change', function() {
-  const selectedTurmaId = this.value;
-  if (!selectedTurmaId) return; // 選択されたTurmaがない場合は何もしない
-
-  // 選択されたTurmaに関連するDisciplinaを取得する関数
-  function getDisciplinas(selectedTurmaId) {
-    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/disciplinas`)
-      .then(response => response.json())
-      .then(data => {
-        const selectDisciplina = document.getElementById('selectDisciplina');
-        // セレクトボックスをクリア
-        selectDisciplina.innerHTML = '';
-        // 取得したDisciplinaリストをセレクトボックスに追加
-        data.forEach(disciplina => {
-          const option = document.createElement('option');
-          option.value = disciplina.id_disciplina;
-          option.textContent = disciplina.disciplina;
-          selectDisciplina.appendChild(option);
-        });
-      })
-      .catch(error => console.error('Disciplinaの取得中にエラーが発生しました:', error));
+// 年を選択するためのセレクトボックスを初期化
+function populateYearSelect() {
+  const yearSelect = document.getElementById('yearSelect')
+  const currentYear = new Date().getFullYear()
+  for (let year = currentYear - 2; year <= currentYear + 2; year++) {
+    const option = document.createElement('option')
+    option.value = year
+    option.textContent = year
+    yearSelect.appendChild(option)
   }
-
-  // 選択されたTurmaに関連するDisciplinaを取得
-  getDisciplinas(selectedTurmaId);
-});
-
-// Turmaが選択されたときの処理
-document.getElementById('selectTurma').addEventListener('change', function() {
-  const selectedTurmaId = this.value;
-  if (!selectedTurmaId) return; // 選択されたTurmaがない場合は何もしない
-
-  // 選択されたTurmaに関連するAlunoを取得する関数
-  function getAlunos(selectedTurmaId) {
-    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/alunos`)
-      .then(response => response.json())
-      .then(data => {
-        // 取得したAlunoリストを使って何かを行う（例：リスト表示など）
-        console.log('Alunos:', data);
+  yearSelect.disabled = false
+}
+// Turmaが選択された時に関係のあるDisciplinasを取得しセレクトボックスを更新
+document.getElementById('turmaSelect').addEventListener('change', event => {
+  const turmaId = event.target.value
+  fetchDisciplinasByTurma(turmaId)
+})
+function fetchDisciplinasByTurma(turmaId) {
+  fetch(`http://localhost:3000/turma_disciplinas/${turmaId}/disciplinas`)
+    .then(response => response.json())
+    .then(data => {
+      const disciplinaSelect = document.getElementById('disciplinaSelect')
+      disciplinaSelect.innerHTML = '<option value="" disabled selected>Escolha a Disciplina</option>'
+      data.forEach(disciplina => {
+        const option = document.createElement('option')
+        option.value = disciplina.id_disciplina
+        option.textContent = disciplina.disciplina
+        disciplinaSelect.appendChild(option)
       })
-      .catch(error => console.error('Alunoの取得中にエラーが発生しました:', error));
+      disciplinaSelect.disabled = false
+    })
+    .catch(error => console.error('Error fetching Disciplinas:', error))
+}
+// 検索ボタンのクリックイベント
+document.getElementById('searchButton').addEventListener('click', () => {
+  const turmaId = document.getElementById('turmaSelect').value
+  const disciplinaId = document.getElementById('disciplinaSelect').value
+  const year = document.getElementById('yearSelect').value
+  const semestre = document.getElementById('semestreSelect').value
+
+  if (turmaId && disciplinaId && year && semestre) {
+    fetchNotasFaltas(turmaId, disciplinaId, year, semestre)
+  } else {
+    alert('Selecione todos')
   }
+})
 
-  // 選択されたTurmaに関連するAlunoを取得
-  getAlunos(selectedTurmaId);
-});
+// notas_faltasを取得しリストを表示
+function fetchNotasFaltas(turmaId, disciplinaId, year, semestre) {
+  fetch(
+    `http://localhost:3000/notas_faltasApri?turmaId=${turmaId}&disciplinaId=${disciplinaId}&year=${year}&semestre=${semestre}`
+  )
+    .then(response => response.json())
+    .then(data => {
+      const resultContainer = document.getElementById('resultContainer')
+      console.log(data)
+      resultContainer.innerHTML = ''
+      if (data.length > 0) {
+        const table = document.createElement('table')
+        table.className = 'table'
+        const thead = document.createElement('thead')
+        const headerRow = document.createElement('tr')
+        ;['Selecionar', 'Foto do Aluno', 'Nome do Aluno', 'N1', 'AP', 'AI'].forEach(text => {
+          const th = document.createElement('th')
+          th.textContent = text
+          headerRow.appendChild(th)
+        })
+        thead.appendChild(headerRow)
+        table.appendChild(thead)
 
-// Disciplinaが選択されたときの処理
-document.getElementById('selectDisciplina').addEventListener('change', function() {
-  const selectedTurmaId = document.getElementById('selectTurma').value;
-  const selectedDisciplinaId = this.value;
-  if (!selectedTurmaId || !selectedDisciplinaId) return; // 選択されたTurmaまたはDisciplinaがない場合は何もしない
+        const tbody = document.createElement('tbody')
+        data.forEach(item => {
+          const row = document.createElement('tr')
+          const selectCell = document.createElement('td')
+          const checkbox = document.createElement('input')
+          checkbox.type = 'checkbox'
+          checkbox.value = item.id_notas_faltas
+          selectCell.appendChild(checkbox)
+          row.appendChild(selectCell)
 
-  // 選択されたTurmaとDisciplinaに関連するNotas_faltasを取得する関数
-  function getNotasFaltas(selectedTurmaId, selectedDisciplinaId) {
-    fetch(`http://localhost:3000/turmas/${selectedTurmaId}/disciplinas/${selectedDisciplinaId}/notas_faltas`)
-      .then(response => response.json())
-      .then(data => {
-        // 取得したNotas_faltasを使って何かを行う（例：入力フィールドを表示など）
-        console.log('Notas_faltas:', data);
-      })
-      .catch(error => console.error('Notas_faltasの取得中にエラーが発生しました:', error));
-  }
+          // 写真セル
+          const photoCell = document.createElement('td')
+          const photoImg = document.createElement('img')
+          photoImg.src = item.foto ? `../../upload/${item.foto}` : '../../upload/semfoto.png'
+          photoImg.alt = 'Sem Foto'
+          photoImg.classList.add('img-alunoMini')
+          photoCell.appendChild(photoImg)
+          row.appendChild(photoCell)
 
-  // 選択されたTurmaとDisciplinaに関連するNotas_faltasを取得
-  getNotasFaltas(selectedTurmaId, selectedDisciplinaId);
-});
+          // 名前セル
+          const nameCell = document.createElement('td')
+          nameCell.textContent = item.nome_aluno
+          row.appendChild(nameCell)
 
+          // N1セル
+          const n1Cell = document.createElement('td')
+          n1Cell.textContent = item.N1
+          console.log(item.N1)
+          row.appendChild(n1Cell)
 
-// ページ読み込み時にTurmaのリストを取得
-document.addEventListener('DOMContentLoaded', getTurmas);
+          // APセル
+          const apCell = document.createElement('td')
+          apCell.textContent = item.AP
+          row.appendChild(apCell)
 
+          // AIセル
+          const aiCell = document.createElement('td')
+          aiCell.textContent = item.AI
+          row.appendChild(aiCell)
 
+          tbody.appendChild(row)
+        })
+        table.appendChild(tbody)
+        resultContainer.appendChild(table)
 
-
+        document.getElementById('applyFaltasButton').style.display = 'block'
+      } else {
+        resultContainer.textContent = '該当するデータが見つかりませんでした'
+        document.getElementById('applyFaltasButton').style.display = 'none'
+      }
+    })
+    .catch(error => console.error('Error fetching notas_faltas:', error))
+}

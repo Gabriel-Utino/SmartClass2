@@ -26,8 +26,8 @@ let alunos = []
 let disciplinaAlunos = []
 let disciplinas = []
 let eventos = []
-let eventoProfessors = []
 let eventoAlunos =[]
+let eventoProfessors = []
 let notas = []
 let professores = []
 let profDisciplinas = []
@@ -35,7 +35,6 @@ let responsaveis = []
 let alunoResps = []
 let turmas = []
 let turmaDisciplinas = []
-let alunosTurma = []
 
 
 
@@ -1229,7 +1228,7 @@ app.post('/assign-disciplinas', (req, res) => {
 
 // apricar faltasの適応するために
 // Disciplinaに関連するAlunosのデータ取得
-app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
+/* app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
   const disciplinaID = parseInt(req.params.id_disciplina);
   connection.query('SELECT * FROM Aluno WHERE id_disciplina = ?', [disciplinaID], (err, results) => {
     if (err) {
@@ -1239,11 +1238,11 @@ app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
       res.json(results);
     }
   });
-});
+}); */
 
 
 
-// apricar faltas3の適応するために
+// apricar faltasの適応するために
 // 全てのTurmaを取得
 app.get('/turmasFaltas', (req, res) => {
   connection.query('SELECT * FROM Turma;', (err, results) => {
@@ -1278,7 +1277,7 @@ app.get('/turma_disciplinas/:id_turma/disciplinas', (req, res) => {
 app.get('/notas_faltasApri', (req, res) => {
   const { turmaId, disciplinaId, year, semestre } = req.query;
   connection.query(
-    `SELECT nf.id_notas_faltas, nf.faltas, a.nome_aluno, a.foto
+    `SELECT nf.id_notas_faltas, nf.faltas, nf.N1, nf.AI, nf.AP, a.nome_aluno, a.foto
      FROM Notas_faltas nf
      JOIN Aluno a ON nf.id_aluno = a.id_aluno
      WHERE nf.id_disciplina = ? AND a.id_turma = ? AND nf.academic_year = ? AND nf.semestre = ?`,
