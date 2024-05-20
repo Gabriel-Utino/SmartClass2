@@ -1,36 +1,26 @@
 const apiUrlProfessor = 'http://localhost:3000/professores'
-const apiUrlEscolas = 'http://localhost:3000/escolas'
-
 // リストを表示
 function displayProfessor(professor) {
   const professorList = document.getElementById('professorList')
 
   professorList.innerHTML = ''
   professor.forEach(professor => {
-    // Escolaの情報を取得
-    fetch(`${apiUrlEscolas}/${professor.id_escola}`)
-      .then(response => response.json())
-      .then(escola => {
-        const professorElement = document.createElement('tr')
-        professorElement.innerHTML = `
-              <td>${professor.id_prof}</td>
-              <td>${professor.nome_prof}</td>
-              <td>${professor.cpf_prof}</td>
-              <td>${professor.telefone_prof}</td>
-              <td>${professor.email_consti_prof}</td>
-              <td>${professor.email_pess_prof}</td>
-              <td>${professor.nascimento_prof}</td>
-              <td>${professor.endereco_prof}</td>
-              <td>${professor.id_disciplina}</td>
-              <td>${escola.nome_escola}</td>
-              <td>
-                <button onclick="updateProfessor(${professor.id_prof})">Editar</button>
-                <button onclick="deleteProfessor(${professor.id_prof})">Excluir</button>
-              </td>
-          `
-        professorList.appendChild(professorElement)
-      })
-      .catch(error => console.error('Erro:', error))
+    const professorElement = document.createElement('tr')
+    professorElement.innerHTML = `
+          <td>${professor.id_prof}</td>
+          <td>${professor.nome_prof}</td>
+          <td>${professor.cpf_prof}</td>
+          <td>${professor.telefone_prof}</td>
+          <td>${professor.email_consti_prof}</td>
+          <td>${professor.email_prof}</td>
+          <td>${formatDate(professor.nascimento_prof)}</td>
+          <td>${professor.endereco_prof}</td>
+          <td>
+            <button onclick="updateProfessor(${professor.id_prof})">Editar</button>
+            <button onclick="deleteProfessor(${professor.id_prof})">Excluir</button>
+          </td>
+      `
+    professorList.appendChild(professorElement)
   })
 }
 
@@ -52,8 +42,6 @@ document.getElementById('addProfessorForm').addEventListener('submit', function 
   const professorPersonalEmail = document.getElementById('professorPersonalEmail').value
   const professorBirthdate = document.getElementById('professorBirthdate').value
   const professorAddress = document.getElementById('professorAddress').value
-  const professorDisciplina = document.getElementById('professorDisciplina').value
-  const professorEscola = document.getElementById('professorEscola').value
 
   fetch(apiUrlProfessor, {
     method: 'POST',
@@ -65,12 +53,10 @@ document.getElementById('addProfessorForm').addEventListener('submit', function 
       cpf_prof: professorCPF,
       telefone_prof: professorPhone,
       email_consti_prof: professorEmail,
-      email_pess_prof: professorPersonalEmail,
+      email_prof: professorPersonalEmail,
       nascimento_prof: professorBirthdate,
       email_pass: professorAddress,
-      endereco_prof: professorAddress,
-      id_disciplina: professorDisciplina,
-      id_escola: professorEscola
+      endereco_prof: professorAddress
     })
   })
     .then(response => response.json())
@@ -86,16 +72,16 @@ function updateProfessor(id) {
   fetch(`${apiUrlProfessor}/${id}`)
     .then(response => response.json())
     .then(data => {
+      // 日付のフォーマット
+      const formattedProfessorBirthdate = formatDate(professorBirthdate)
       document.getElementById('editProfessorId').value = data.id_prof
       document.getElementById('editProfessorName').value = data.nome_prof
       document.getElementById('editProfessorCPF').value = data.cpf_prof
       document.getElementById('editProfessorPhone').value = data.telefone_prof
-      document.getElementById('editProfessorEmail').value = data.email_consti_prof
-      document.getElementById('editProfessorPersonalEmail').value = data.email_pess_prof
-      document.getElementById('editProfessorBirthdate').value = data.nascimento_prof
+      document.getElementById('editProfessorConstEmail').value = data.email_consti_prof
+      document.getElementById('editProfessorPersonalEmail').value = data.email_prof
+      document.getElementById('editProfessorBirthdate').value = data.formattedProfessorBirthdate
       document.getElementById('editProfessorAddress').value = data.endereco_prof
-      document.getElementById('editProfessorDisciplina').value = data.id_disciplina
-      document.getElementById('editProfessorEscola').value = data.id_escola
     })
     .catch(error => console.error('Erro:', error))
 }
@@ -107,13 +93,14 @@ document.getElementById('updateProfessorForm').addEventListener('submit', functi
   const professorName = document.getElementById('editProfessorName').value
   const professorCPF = document.getElementById('editProfessorCPF').value
   const professorPhone = document.getElementById('editProfessorPhone').value
-  const professorEmail = document.getElementById('editProfessorEmail').value
+  const professorConstiEmail = document.getElementById('editProfessorConstEmail').value
   const professorPersonalEmail = document.getElementById('editProfessorPersonalEmail').value
   const professorBirthdate = document.getElementById('editProfessorBirthdate').value
   const professorAddress = document.getElementById('editProfessorAddress').value
-  const professorDisciplina = document.getElementById('editProfessorDisciplina').value
-  const professorEscola = document.getElementById('editProfessorEscola').value
   // 他のフィールドを取得する必要があります
+
+  // 日付のフォーマット
+  const formattedProfessorBirthdate = formatDate(professorBirthdate)
 
   fetch(`${apiUrlProfessor}/${professorId}`, {
     method: 'PUT',
@@ -124,13 +111,10 @@ document.getElementById('updateProfessorForm').addEventListener('submit', functi
       nome_prof: professorName,
       cpf_prof: professorCPF,
       telefone_prof: professorPhone,
-      email_consti_prof: professorEmail,
-      email_pess_prof: professorPersonalEmail,
-      nascimento_prof: professorBirthdate,
-      email_pass: professorAddress,
-      endereco_prof: professorAddress,
-      id_disciplina: professorDisciplina,
-      id_escola: professorEscola
+      email_consti_prof: professorConstiEmail,
+      email_prof: professorPersonalEmail,
+      nascimento_prof: formattedProfessorBirthdate,
+      endereco_prof: professorAddress
     })
   })
     .then(response => response.json())
@@ -156,9 +140,17 @@ getProfessor()
 function cancelEdit() {
   document.getElementById('updateProfessorForm').reset()
 }
+// 日付のフォーマット関数
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  const year = date.getUTCFullYear()
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(date.getUTCDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 // サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
-function populateSchools() {
+/* function populateSchools() {
   fetch(apiUrlEscolas)
     .then(response => response.json())
     .then(data => {
@@ -188,3 +180,4 @@ function populateSchools() {
 
 // ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
 document.addEventListener('DOMContentLoaded', populateSchools)
+ */

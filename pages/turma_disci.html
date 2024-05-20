@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
@@ -127,21 +127,25 @@
     <!-- 新しいクラスと教科の関連付けを追加するフォーム -->
     <div class="row">
       <div class="col-md-6">
-        <h2>Adicionar Turma e Disciplina</h2>
+        <h2>Adicionar Aluno à Turma</h2>
         <form id="addTurmaDisciplinaForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="turmaDisciplinaTurmaId" placeholder="ID da Turma" required>
+            <select class="form-control" id="turmaId" required>
+              <option value="">Selecione a turma</option>
+              <!-- Turmasを追加 -->
+            </select>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="turmaDisciplinaDisciplinaId" placeholder="ID da Disciplina"
-              required>
+            <select class="form-control" id="disciplinaId" required>
+              <option value="">Selecione a disciplina</option>
+              <!-- disciplinaを追加 -->
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
     </div>
   </div>
-
 
 
 
