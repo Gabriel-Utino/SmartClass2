@@ -168,8 +168,8 @@ app.get('/turmas/:id_turma', (req, res) => {
 app.post('/turmas', (req, res) => {
   const newTurma = req.body
   connection.query(
-    'INSERT INTO Turma (nome_turma, Ano, semestre) VALUES (?, ?, ?)',
-    [newTurma.nome_turma, newTurma.Ano, newTurma.semestre],
+    'INSERT INTO Turma (nome_turma, ano, semestre) VALUES (?, ?, ?)',
+    [newTurma.nome_turma, newTurma.ano, newTurma.semestre],
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
@@ -189,8 +189,8 @@ app.put('/turmas/:id_turma', (req, res) => {
   const index = turmas.findIndex(turma => turma.id_turma === id_turma)
   if (index !== -1) {
     connection.query(
-      'UPDATE Turma SET nome_turma=?, Ano=?, semestre=? WHERE id_turma=?',
-      [updatedTurma.nome_turma, updatedTurma.Ano, updatedTurma.semestre, id_turma],
+      'UPDATE Turma SET nome_turma=?, ano=?, semestre=? WHERE id_turma=?',
+      [updatedTurma.nome_turma, updatedTurma.ano, updatedTurma.semestre, id_turma],
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
@@ -1227,7 +1227,7 @@ app.post('/assign-disciplinas', (req, res) => {
 
 
 
-// faltasの適応するために
+// apricar faltasの適応するために
 // Disciplinaに関連するAlunosのデータ取得
 app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
   const disciplinaID = parseInt(req.params.id_disciplina);
@@ -1240,6 +1240,78 @@ app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
     }
   });
 });
+
+
+
+// apricar faltas3の適応するために
+// 全てのTurmaを取得
+app.get('/turmasFaltas', (req, res) => {
+  connection.query('SELECT * FROM Turma;', (err, results) => {
+    if (err) {
+      console.error('Turmaテーブルでエラー発生: ' + err);
+      res.status(500).json({ message: 'Turmaを取得できませんでした' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+// 指定されたTurmaに関連するDisciplinasを取得
+app.get('/turma_disciplinas/:id_turma/disciplinas', (req, res) => {
+  const id_turma = parseInt(req.params.id_turma);
+  connection.query(
+    `SELECT d.id_disciplina, d.disciplina 
+     FROM Turma_Disciplina td 
+     JOIN Disciplina d ON td.id_disciplina = d.id_disciplina 
+     WHERE td.id_turma = ?`,
+    [id_turma],
+    (err, results) => {
+      if (err) {
+        console.error('Turma_Disciplinaテーブルでエラー発生: ' + err);
+        res.status(500).json({ message: 'Disciplinaを取得できませんでした' });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+// notas_faltasテーブルの検索
+app.get('/notas_faltasApri', (req, res) => {
+  const { turmaId, disciplinaId, year, semestre } = req.query;
+  connection.query(
+    `SELECT nf.id_notas_faltas, nf.faltas, a.nome_aluno, a.foto
+     FROM Notas_faltas nf
+     JOIN Aluno a ON nf.id_aluno = a.id_aluno
+     WHERE nf.id_disciplina = ? AND a.id_turma = ? AND nf.academic_year = ? AND nf.semestre = ?`,
+    [disciplinaId, turmaId, year, semestre],
+    (err, results) => {
+      if (err) {
+        console.error('Error fetching notas_faltas:', err);
+        res.status(500).json({ message: '検索できませんでした' });
+      } else {
+        res.json(results);
+      }
+    }
+  );
+});
+// faltasを更新
+app.put('/notas_faltasApri/faltas', (req, res) => {
+  const { ids } = req.body;
+  const placeholders = ids.map(() => '?').join(',');
+  connection.query(
+    `UPDATE Notas_faltas SET faltas = faltas + 1 WHERE id_notas_faltas IN (${placeholders})`,
+    ids,
+    (err, results) => {
+      if (err) {
+        console.error('Error updating faltas:', err);
+        console.log("エラー内容：" + err)
+        res.status(500).json({ success: false, message: '更新できませんでした' });
+      } else {
+        res.json({ success: true, message: 'Faltasが適用されました' });
+      }
+    }
+  );
+});
+
 
 
 

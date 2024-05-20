@@ -105,6 +105,7 @@ document.getElementById('updateTurmaForm').addEventListener('submit', function (
   
   // MySQLのYEAR型に合わせて年をフォーマットする
   const formattedYear = new Date(turmaAnoINT, 0).toISOString().substring(0, 4);
+  const formattedYear2 = parseInt(formattedYear);
 
 
   fetch(`${apiUrlTurma}/${turmaId}`, {
@@ -114,14 +115,14 @@ document.getElementById('updateTurmaForm').addEventListener('submit', function (
     },
     body: JSON.stringify({
       nome_turma: turmaName,
-      ano: formattedYear, // ここを修正
+      ano: formattedYear2, // ここを修正
       semestre: turmaSemestreINT
     })
   })
     .then(response => response.json())
     .then(data => {
       getTurma();
-      document.getElementById('editTurmaForm').style.display = 'none';
+      /* document.getElementById('editTurmaForm').style.display = 'none'; */
     })
     .catch(error => console.error('Erro:', error));
 });
