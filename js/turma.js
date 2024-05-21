@@ -2,31 +2,25 @@ const apiUrlTurma = 'http://localhost:3000/turmas'
 const apiUrlProfessor = 'http://localhost:3000/professores'
 
 // リストを表示
-/* function displayTurma(turma) {
-  const turmaList = document.getElementById('turmaList');
-  turmaList.innerHTML = '';
-  turma.forEach(turma => {
-    const turmaElement = document.createElement('tr');
-    turmaElement.innerHTML = `
-              <td>${turma.id_turma}</td>
-              <td>${turma.nome_turma}</td>
-              <td>${turma.periodo}</td>
-              <td>${turma.id_prof}</td>
-              <td>
-                <button onclick="updateTurma(${turma.id_turma})">Editar</button>
-                <button onclick="deleteTurma(${turma.id_turma})">Excluir</button>
-              </td>
-          `;
-    turmaList.appendChild(turmaElement);
-  });
-} */
-// リストを表示
 function displayTurma(turma) {
   const turmaList = document.getElementById('turmaList')
   turmaList.innerHTML = ''
   turma.forEach(turma => {
+    const turmaElement = document.createElement('tr')
+    turmaElement.innerHTML = `
+          <td>${turma.id_turma}</td>
+          <td>${turma.nome_turma}</td>
+          <td>${turma.ano}</td>
+          <td>${turma.semestre}</td>
+          <td>
+            <button onclick="updateTurma(${turma.id_turma})">Editar</button>
+            <button onclick="deleteTurma(${turma.id_turma})">Excluir</button>
+          </td>
+      `
+    turmaList.appendChild(turmaElement)
+
     // Escolaの情報を取得
-    fetch(`${apiUrlProfessor}/${turma.id_prof}`)
+    /* fetch(`${apiUrlProfessor}/${turma.id_prof}`)
       .then(response => response.json())
       .then(professor => {
         const turmaElement = document.createElement('tr')
@@ -42,7 +36,7 @@ function displayTurma(turma) {
           `
         turmaList.appendChild(turmaElement)
       })
-      .catch(error => console.error('Erro:', error))
+      .catch(error => console.error('Erro:', error)) */
   })
 }
 
@@ -56,10 +50,16 @@ function getTurma() {
 
 // 追加
 document.getElementById('addTurmaForm').addEventListener('submit', function (event) {
-  event.preventDefault()
-  const turmaName = document.getElementById('turmaName').value
-  const turmaPeriodo = document.getElementById('turmaPeriodo').value
-  const turmaIdProf = document.getElementById('turmaIdProf').value
+  event.preventDefault();
+  const turmaName = document.getElementById('turmaName').value;
+  const turmaAno = document.getElementById('turmaAno').value;
+  const turmaAnoINT = parseInt(turmaAno);
+  const turmaSemestre = document.getElementById('turmaSemestre').value;
+  const turmaSemestreINT = parseInt(turmaSemestre);
+
+  
+  // MySQLのYEAR型に合わせて年をフォーマットする
+  const formattedYear = new Date(turmaAnoINT, 0).toISOString().substring(0, 4);
 
   fetch(apiUrlTurma, {
     method: 'POST',
@@ -68,17 +68,17 @@ document.getElementById('addTurmaForm').addEventListener('submit', function (eve
     },
     body: JSON.stringify({
       nome_turma: turmaName,
-      periodo: turmaPeriodo,
-      id_prof: turmaIdProf
+      ano: formattedYear, // ここを修正
+      semestre: turmaSemestreINT
     })
   })
     .then(response => response.json())
     .then(data => {
-      getTurma()
-      document.getElementById('addTurmaForm').reset()
+      getTurma();
+      document.getElementById('addTurmaForm').reset();
     })
-    .catch(error => console.error('Erro:', error))
-})
+    .catch(error => console.error('Erro:', error));
+});
 
 // 更新
 function updateTurma(id) {
@@ -87,19 +87,26 @@ function updateTurma(id) {
     .then(data => {
       document.getElementById('editTurmaId').value = data.id_turma
       document.getElementById('editTurmaName').value = data.nome_turma
-      document.getElementById('editTurmaPeriodo').value = data.periodo
-      document.getElementById('editTurmaIdProf').value = data.id_prof
+      document.getElementById('editTurmaAno').value = parseInt(data.ano)
+      document.getElementById('editTurmaSemestre').value = parseInt(data.semestre)
     })
     .catch(error => console.error('Erro:', error))
 }
 
 // 実際に更新
 document.getElementById('updateTurmaForm').addEventListener('submit', function (event) {
-  event.preventDefault()
-  const turmaId = document.getElementById('editTurmaId').value
-  const turmaName = document.getElementById('editTurmaName').value
-  const turmaPeriodo = document.getElementById('editTurmaPeriodo').value
-  const turmaIdProf = document.getElementById('editTurmaIdProf').value
+  event.preventDefault();
+  const turmaId = document.getElementById('editTurmaId').value;
+  const turmaName = document.getElementById('editTurmaName').value;
+  const turmaAno = document.getElementById('editTurmaAno').value;
+  const turmaAnoINT = parseInt(turmaAno);
+  const turmaSemestre = document.getElementById('editTurmaSemestre').value;
+  const turmaSemestreINT = parseInt(turmaSemestre);
+  
+  // MySQLのYEAR型に合わせて年をフォーマットする
+  const formattedYear = new Date(turmaAnoINT, 0).toISOString().substring(0, 4);
+  const formattedYear2 = parseInt(formattedYear);
+
 
   fetch(`${apiUrlTurma}/${turmaId}`, {
     method: 'PUT',
@@ -108,17 +115,17 @@ document.getElementById('updateTurmaForm').addEventListener('submit', function (
     },
     body: JSON.stringify({
       nome_turma: turmaName,
-      periodo: turmaPeriodo,
-      id_prof: turmaIdProf
+      ano: formattedYear2, // ここを修正
+      semestre: turmaSemestreINT
     })
   })
     .then(response => response.json())
     .then(data => {
-      getTurma()
-      document.getElementById('editTurmaForm').style.display = 'none'
+      getTurma();
+      /* document.getElementById('editTurmaForm').style.display = 'none'; */
     })
-    .catch(error => console.error('Erro:', error))
-})
+    .catch(error => console.error('Erro:', error));
+});
 
 // 削除ボタン
 function deleteTurma(id_turma) {
@@ -137,11 +144,11 @@ function cancelEdit() {
 }
 
 // サーバーからEscolaの情報を取得してセレクトボックスに追加する関数
-function populateProf() {
+/* function populateProf() {
   fetch(apiUrlProfessor)
     .then(response => response.json())
     .then(data => {
-      const selectElement = document.getElementById('turmaIdProf')
+      const selectElement = document.getElementById('turmaAno')
       data.forEach(prof => {
         const option = document.createElement('option')
         option.value = prof.id_prof
@@ -154,7 +161,7 @@ function populateProf() {
   fetch(apiUrlProfessor)
     .then(response => response.json())
     .then(data => {
-      const selectElement = document.getElementById('editTurmaIdProf')
+      const selectElement = document.getElementById('editTurmaAno')
       data.forEach(prof => {
         const option = document.createElement('option')
         option.value = prof.id_prof
@@ -163,7 +170,12 @@ function populateProf() {
       })
     })
     .catch(error => console.error('Error fetching schools:', error))
-}
+} */
 
 // ページが読み込まれたらEscolaの情報を取得してセレクトボックスを更新する
-document.addEventListener('DOMContentLoaded', populateProf)
+/* document.addEventListener('DOMContentLoaded', populateProf) */
+
+
+
+
+
