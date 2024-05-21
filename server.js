@@ -1224,24 +1224,6 @@ app.post('/assign-disciplinas', (req, res) => {
 
 
 
-
-
-// apricar faltasの適応するために
-// Disciplinaに関連するAlunosのデータ取得
-/* app.get('/disciplinas/:id_disciplina/alunos', (req, res) => {
-  const disciplinaID = parseInt(req.params.id_disciplina);
-  connection.query('SELECT * FROM Aluno WHERE id_disciplina = ?', [disciplinaID], (err, results) => {
-    if (err) {
-      console.error('Alunoデータ取得エラー: ' + err);
-      res.status(500).json({ message: 'データ取得エラー' });
-    } else {
-      res.json(results);
-    }
-  });
-}); */
-
-
-
 // apricar faltasの適応するために
 // 全てのTurmaを取得
 app.get('/turmasFaltas', (req, res) => {
@@ -1277,7 +1259,7 @@ app.get('/turma_disciplinas/:id_turma/disciplinas', (req, res) => {
 app.get('/notas_faltasApri', (req, res) => {
   const { turmaId, disciplinaId, year, semestre } = req.query;
   connection.query(
-    `SELECT nf.id_notas_faltas, nf.faltas, nf.N1, nf.AI, nf.AP, a.nome_aluno, a.foto
+    `SELECT nf.id_notas_faltas, nf.faltas, nf.N1, nf.AI, nf.AP, nf.id_aluno, a.nome_aluno, a.foto
      FROM Notas_faltas nf
      JOIN Aluno a ON nf.id_aluno = a.id_aluno
      WHERE nf.id_disciplina = ? AND a.id_turma = ? AND nf.academic_year = ? AND nf.semestre = ?`,
@@ -1305,11 +1287,12 @@ app.put('/notas_faltasApri/faltas', (req, res) => {
         console.log("エラー内容：" + err)
         res.status(500).json({ success: false, message: '更新できませんでした' });
       } else {
-        res.json({ success: true, message: 'Faltasが適用されました' });
+        res.json({ success: true, message: 'Faltas foi apricada' });
       }
     }
   );
 });
+
 
 
 
