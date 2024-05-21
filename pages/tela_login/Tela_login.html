@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <!-- Adiciona os links para os arquivos do Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="styles.css"> <!-- Inclui o arquivo de estilo externo -->
+</head>
+
+<body>
+  <div id="logo-container">
+    <img src="logo.jpg" alt="Logo" id="logo">
+  </div>
+  <div id="login-container">
+    <input type="text" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Senha">
+    <p id="forgot-password"><a href="../Trocar_senha/trocar_senha.html">Esqueci minha senha</a></p>
+    <button id="login-button" class="btn btn-dark">Entrar</button>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <script>
+    document.getElementById('login-button').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // サーバーにログイン情報を送信
+      fetch('http://localhost:3000/loginProf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, senha: password })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('ログインに失敗しました');
+        })
+        .then(data => {
+          // ログイン成功時の処理
+          console.log(data);
+          // ログイン後の処理をここに追加
+          window.location.href = '../prof/homeProf.html';
+        })
+        .catch(error => {
+          // エラーメッセージの表示
+          console.error(error.message);
+          alert('ログインに失敗しました');
+        });
+    });
+  </script>
+
+</body>
+
+</html>

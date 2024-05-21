@@ -1,3 +1,7 @@
+##insatall
+npm i express cors mysql body-parser
+
+##DB tables
 CREATE TABLE Responsavel (
     id_resp INT AUTO_INCREMENT PRIMARY KEY,
     nome_resp VARCHAR(255),

@@ -1,0 +1,53 @@
+body {
+    background-color: #000000; /* Fundo preto */
+    color: #fff; /* Texto branco */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#logo-container {
+    text-align: center;
+    margin-bottom: 70px; /* Ajuste a margem conforme necessário */
+}
+
+#logo {
+    width: 200px; /* Ajuste a largura conforme necessário */
+    height: auto; /* Isso mantém a proporção da imagem */
+    border-radius: 50%;
+}
+
+#login-container {
+    text-align: center;
+}
+
+#email, #password {
+    width: 300px;
+    margin-bottom: 100px;
+    padding: 8px;
+    background-color: transparent; /* Caixas de texto transparentes */
+    border: none; /* Remove a borda */
+    border-bottom: 1px solid #fff; /* Adiciona uma borda branca na parte inferior */
+    color: #fff; /* Texto branco */
+    display: block; /* Certifica-se de que cada campo de texto ocupa toda a largura disponível */
+}
+
+#email {
+    margin-bottom: 10px; /* Espaçamento entre as caixas de texto */
+}
+
+#forgot-password {
+    text-decoration: underline;
+    margin-bottom: 10px; /* Espaçamento abaixo do texto 'Esqueci minha senha' */
+}
+
+#login-button {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+

@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql')
+const bodyParser = require('body-parser');
+
 //
 const app = express()
 const port = 3000
@@ -1292,6 +1294,38 @@ app.put('/notas_faltasApri/faltas', (req, res) => {
     }
   );
 });
+
+
+
+
+
+
+
+//login
+// ログインのエンドポイントを作成
+app.post('/loginProf', (req, res) => {
+  const { email, senha } = req.body;
+
+  // ユーザーの存在を確認
+  connection.query('SELECT * FROM Professor WHERE email_prof = ? AND senha = ?', [email, senha], (err, results) => {
+    if (err) {
+      console.error('ログイン中にエラーが発生しました: ' + err);
+      res.status(500).json({ message: 'ログインに失敗しました' });
+    } else {
+      if (results.length > 0) {
+        // 認証成功
+        const user = results[0];
+        res.status(200).json({ message: 'ログインに成功しました', user });
+      } else {
+        // 認証失敗
+        res.status(401).json({ message: 'メールアドレスまたはパスワードが正しくありません' });
+      }
+    }
+  });
+});
+
+
+
 
 
 

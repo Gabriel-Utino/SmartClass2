@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles2.css" rel="stylesheet"> <!-- Vinculando o arquivo CSS externo -->
+</head>
+<body>
+    <img id="logo" src="logo.png" alt="logo">
+
+    <div class="container">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><img src="alerta.png" id="alerta" alt="alerta"></span>
+            </div>
+            <p>Esqueceu a senha? Coloque seu email abaixo para redefinir.</p>
+        </div>
+        
+        <input type="text" class="form-control" id="emailInput" placeholder="Seu Email">
+
+        <button class="btn btn-dark" onclick="enviar()">Enviar</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <script>
+        function enviar() {
+            // Lógica para enviar a solicitação de redefinição de senha
+            var email = document.getElementById('emailInput').value;
+            console.log('Enviando solicitação para: ' + email);
+            // Adicione aqui a lógica para enviar a solicitação ao backend
+        }
+    </script>
+</body>
+</html>
