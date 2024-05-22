@@ -1,8 +1,12 @@
 const apiUrlAluno = 'http://localhost:3000/alunos'
 const apiUrlTurma = 'http://localhost:3000/turmas'
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
-  const id_aluno = 1 // 表示したい学生のID
+  const urlParams = new URLSearchParams(window.location.search);
+  const alunoId = urlParams.get('alunoId');
+  const id_aluno = alunoId // 表示したい学生のID
   const url = `${apiUrlAluno}/${id_aluno}`
 
   fetch(url)

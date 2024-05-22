@@ -129,7 +129,7 @@ function fetchNotasFaltas(turmaId, disciplinaId, year, semestre) {
 
         document.getElementById('applyFaltasButton').style.display = 'block'
       } else {
-        resultContainer.textContent = '該当するデータが見つかりませんでした'
+        resultContainer.textContent = 'Nenhum dado correspondente foi encontrado'
         document.getElementById('applyFaltasButton').style.display = 'none'
       }
     })

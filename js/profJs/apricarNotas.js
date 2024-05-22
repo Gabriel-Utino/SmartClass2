@@ -142,7 +142,7 @@ function fetchNotasFaltas(turmaId, disciplinaId, year, semestre) {
         table.appendChild(tbody)
         resultContainer.appendChild(table)
       } else {
-        resultContainer.textContent = '該当するデータが見つかりませんでした'
+        resultContainer.textContent = 'Nenhum dado correspondente foi encontrado'
       }
     })
     .catch(error => console.error('Error fetching notas_faltas:', error))

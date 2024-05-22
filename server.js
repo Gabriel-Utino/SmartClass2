@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql')
+const bodyParser = require('body-parser');
+const crypto = require('crypto'); // Importar módulo crypto para gerar token
+const nodemailer = require('nodemailer'); 
 //
 const app = express()
 const port = 3000
@@ -21,12 +24,17 @@ connection.connect(err => {
   console.log('Connected to MySQL database')
 })
 
+// Middleware para analisar corpos de requisição
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
+
 // 商品の配列をMySQLから読み込む
 let alunos = []
 let disciplinaAlunos = []
 let disciplinas = []
 let eventos = []
-let eventoAlunos =[]
+let eventoAlunos = []
 let eventoProfessors = []
 let notas = []
 let professores = []
@@ -615,8 +623,8 @@ app.get('/notas_faltas', (req, res) => {
 })
 // 取得
 app.get('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const notasID = parseInt(req.params.id_notas_faltas )
-  const nota = notas.find(nota => nota.id_notas_faltas  === notasID)
+  const notasID = parseInt(req.params.id_notas_faltas)
+  const nota = notas.find(nota => nota.id_notas_faltas === notasID)
   if (nota) {
     res.json(nota)
   } else {
@@ -653,9 +661,9 @@ app.post('/notas_faltas', (req, res) => {
 })
 // 更新
 app.put('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const id_notas_faltas  = parseInt(req.params.id_notas_faltas )
+  const id_notas_faltas = parseInt(req.params.id_notas_faltas)
   const updatedNota = req.body
-  const index = notas.findIndex(nota => nota.id_notas_faltas  === id_notas_faltas )
+  const index = notas.findIndex(nota => nota.id_notas_faltas === id_notas_faltas)
   if (index !== -1) {
     connection.query(
       'UPDATE Notas_faltas SET id_disciplina=?, id_aluno=?, n1=?, AI=?, AP=?, faltas=?, academic_year=?, data_matricula=?, semestre=? WHERE id_notas_faltas=?',
@@ -687,8 +695,8 @@ app.put('/notas_faltas/:id_notas_faltas', (req, res) => {
 })
 // 削除
 app.delete('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const id_notas_faltas  = parseInt(req.params.id_notas)
-  const index = notas.findIndex(nota => nota.id_notas_faltas  === id_notas_faltas )
+  const id_notas_faltas = parseInt(req.params.id_notas)
+  const index = notas.findIndex(nota => nota.id_notas_faltas === id_notas_faltas)
   if (index !== -1) {
     connection.query('DELETE FROM Notas_faltas WHERE id_notas_faltas=?', [id_notas_faltas], err => {
       if (err) {
@@ -819,7 +827,7 @@ app.get('/evento_alunos', (req, res) => {
 app.get('/evento_alunos/:id_evento_aluno', (req, res) => {
   const id_evento_alunoID = parseInt(req.params.id_evento_aluno)
   const eventoAluno = eventoAlunos.find(
-    eventoAluno =>  eventoAluno.id_evento_aluno === id_evento_alunoID
+    eventoAluno => eventoAluno.id_evento_aluno === id_evento_alunoID
   )
   if (eventoAluno) {
     res.json(eventoAluno)
@@ -975,7 +983,7 @@ app.get('/evento_professors', (req, res) => {
 app.get('/evento_professors/:id_evento_prof', (req, res) => {
   const id_evento_profID = parseInt(req.params.id_evento_prof)
   const eventoProfessor = eventoProfessors.find(
-    eventoProfessor =>  eventoProfessor.id_evento_prof === id_evento_profID
+    eventoProfessor => eventoProfessor.id_evento_prof === id_evento_profID
   )
   if (eventoProfessor) {
     res.json(eventoProfessor)
@@ -1158,6 +1166,206 @@ app.delete('/prof_disciplinas/:id_prof_disc', (req, res) => {
     res.status(404).json({ message: '見つかりませんでした' });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////ENVIO DE EMAIL///////////////////////
+
+// Rota para verificar se o email está cadastrado no banco de dados
+app.post('/verificarEmail', (req, res) => {
+  const { email } = req.body;
+  const sql = 'SELECT * FROM users WHERE email = ?';
+  connection.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao consultar email no banco de dados:', err);
+      res.status(500).json({ message: 'Erro interno do servidor' });
+      return;
+    }
+
+    console.log('Resultados da consulta:', results); // Exibe os resultados da consulta
+
+    // Verificar se o email foi encontrado no banco de dados
+    if (results.length > 0) {
+      // Email encontrado
+      res.json({ message: 'Email cadastrado' });
+    } else {
+      // Email não encontrado
+      res.status(404).json({ message: 'Email não encontrado' });
+    }
+  });
+});
+
+// Rota para enviar o email de redefinição de senha
+app.post('/enviarEmailRedefinicao', (req, res) => {
+  const { email } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail', // Provedor de email (exemplo: Gmail)
+    auth: {
+      user: 'teste.pim.uscs@gmail.com', // Seu email
+      pass: 'ozpykegrfsynjaxs' // Sua senha do email
+    }
+  });
+
+  // Consultar o ID do usuário pelo email
+  const sqlGetUserId = 'SELECT id FROM users WHERE email = ?';
+  connection.query(sqlGetUserId, [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao consultar ID do usuário no banco de dados:', err);
+      res.status(500).json({ message: 'Erro interno do servidor' });
+      return;
+    }
+
+    if (results.length === 0) {
+      // Usuário com o email fornecido não encontrado
+      res.status(404).json({ message: 'Usuário não encontrado com o email fornecido' });
+      return;
+    }
+
+    const userId = results[0].id;
+
+    // Gerar token único
+    const token = crypto.randomBytes(20).toString('hex'); // Token hexadecimal de 40 caracteres
+
+    // Definir data de expiração para 30 minutos a partir de agora
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+
+    // Inserir o token no banco de dados
+    const sqlInsertToken = 'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)';
+    connection.query(sqlInsertToken, [userId, token, expiresAt], (err, insertResult) => {
+      if (err) {
+        console.error('Erro ao inserir token no banco de dados:', err);
+        res.status(500).send('Erro ao enviar o email de redefinição.');
+        return;
+      }
+
+      // URL da página HTML para redefinir a senha com o token
+      const resetPasswordURL = `http://127.0.0.1:5500/reset-password/reset-password.html?token=${token}`;
+
+      const mailOptions = {
+        from: 'teste.pim.uscs@gmail.com',
+        to: email,
+        subject: 'Redefinição de Senha',
+        html: `
+              <p>Você solicitou a redefinição de senha. Clique no link abaixo para redefinir sua senha:</p>
+              <p><a href="${resetPasswordURL}">Redefinir Senha</a></p>
+          `
+      };
+
+      // Enviar o email de redefinição de senha
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.error('Erro ao enviar o email de redefinição:', error);
+          res.status(500).send('Erro ao enviar o email de redefinição.');
+        } else {
+          console.log('Email enviado:', info.response);
+          res.status(200).send('Email enviado com sucesso.');
+        }
+      });
+    });
+  });
+});
+
+// Rota para redefinir a senha
+app.post('/redefinirSenha', (req, res) => {
+  const { token, newPassword } = req.body;
+
+  // Consultar o token no banco de dados
+  const sqlSelectToken = 'SELECT * FROM password_reset_tokens WHERE token = ? AND expires_at > NOW()';
+  connection.query(sqlSelectToken, [token], (err, results) => {
+    if (err) {
+      console.error('Erro ao consultar token no banco de dados:', err);
+      res.status(500).json({ message: 'Erro interno do servidor' });
+      return;
+    }
+
+    if (results.length === 0) {
+      // Token inválido ou expirado
+      res.status(400).json({ message: 'Token inválido ou expirado' });
+      return;
+    }
+
+    const tokenInfo = results[0];
+    const userId = tokenInfo.user_id;
+
+    // Atualizar a senha do usuário
+    const sqlUpdatePassword = 'UPDATE users SET password = ? WHERE id = ?';
+    connection.query(sqlUpdatePassword, [newPassword, userId], (err, updateResult) => {
+      if (err) {
+        console.error('Erro ao atualizar a senha no banco de dados:', err);
+        res.status(500).json({ message: 'Erro interno do servidor' });
+        return;
+      }
+
+      // Remover o token do banco de dados após usar
+      const sqlDeleteToken = 'DELETE FROM password_reset_tokens WHERE id = ?';
+      connection.query(sqlDeleteToken, [tokenInfo.id], (err, deleteResult) => {
+        if (err) {
+          console.error('Erro ao excluir o token do banco de dados:', err);
+        }
+      });
+
+      res.status(200).json({ message: 'Senha redefinida com sucesso' });
+    });
+  });
+});
+
+/////////////////////////LOGIN//////////////////////////////////
+
+// Rota para autenticação de login
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+
+  // Verifica se email e senha foram fornecidos
+  if (!email || !password) {
+    res.status(400).json({ message: 'Email e senha são obrigatórios' });
+    return;
+  }
+
+  // Consulta SQL para verificar as credenciais
+  const sql = `SELECT * FROM professor WHERE email_consti_prof = ? AND senha = ?`;
+  connection.query(sql, [email, password], (err, results) => {
+    if (err) {
+      console.error('Erro ao executar consulta SQL:', err);
+      res.status(500).json({ message: 'Erro interno do servidor' });
+      return;
+    }
+
+    // Verifica se encontrou um usuário com as credenciais fornecidas
+    if (results.length > 0) {
+      // Se as credenciais forem válidas, envia uma resposta de sucesso
+      res.status(200).json({ success: true });
+    } else {
+      // Se as credenciais forem inválidas, envia uma resposta indicando isso
+      res.status(401).json({ success: false, message: 'Credenciais inválidas' });
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
 
 
 
