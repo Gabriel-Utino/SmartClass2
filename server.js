@@ -45,88 +45,6 @@ let eventoProfessors = []
 let turmaDisciplinas = []
 
 
-// Escolaのサーバー管理に関わる部分
-// Escolaテーブルのデータ取得
-connection.query('SELECT * FROM Escola;', (err, results) => {
-  if (err) {
-    console.error('Escolaテーブルでエラー発生: ' + err)
-  } else {
-    escolas = results
-  }
-})
-// リスト化
-app.get('/escolas', (req, res) => {
-  res.json(escolas)
-})
-// 取得
-app.get('/escolas/:id_escola', (req, res) => {
-  const escolaID = parseInt(req.params.id_escola)
-  const escola = escolas.find((escola) => escola.id_escola === escolaID)
-  if (escola) {
-    res.json(escola)
-  } else {
-    res.status(404).json({ message: '見つかりません' })
-  }
-})
-// 追加
-app.post('/escolas', (req, res) => {
-  const newEscola = req.body
-  connection.query(
-    'INSERT INTO Escola (nome_escola, email_escola) VALUES (?, ?)',
-    [newEscola.nome_escola, newEscola.email_escola],
-    (err, result) => {
-      if (err) {
-        console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Escolaを追加できませんでした' })
-      } else {
-        newEscola.id_escola = result.insertId
-        escolas.push(newEscola)
-        res.status(201).json(newEscola)
-      }
-    }
-  )
-})
-// 更新
-app.put("/escolas/:id_escola", (req, res) => {
-  const id_escola = parseInt(req.params.id_escola)
-  const updatedEscola = req.body
-  const index = escolas.findIndex((escola) => escola.id_escola === id_escola)
-  if (index !== -1) {
-    connection.query(
-      "UPDATE Escola SET nome_escola=?, email_escola=? WHERE id_escola=?",
-      [updatedEscola.nome_escola, updatedEscola.email_escola, id_escola],
-      (err) => {
-        if (err) {
-          console.error("Error updating data in MySQL: " + err)
-          res.status(500).json({ message: "Escolaを更新できませんでした" })
-        } else {
-          escolas[index] = { ...escolas[index], ...updatedEscola }
-          res.json(escolas[index])
-        }
-      }
-    )
-  } else {
-    res.status(404).json({ message: "Escolaが見つかりません" })
-  }
-})
-// 削除
-app.delete('/escolas/:id_escola', (req, res) => {
-  const id_escola = parseInt(req.params.id_escola)
-  const index = escolas.findIndex(escola => escola.id_escola === id_escola)
-  if (index !== -1) {
-    connection.query('DELETE FROM Escola WHERE id_escola=?', [id_escola], err => {
-      if (err) {
-        console.error('Escolaテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
-      } else {
-        const removedEscola = escolas.splice(index, 1)
-        res.json(removedEscola[0])
-      }
-    })
-  } else {
-    res.status(404).json({ message: '見つかりませんでした' })
-  }
-})
 
 
 
@@ -557,7 +475,7 @@ app.delete('/alunos/:id_aluno', (req, res) => {
 
 // Aluno_Respのサーバー管理に関わる部分
 // Aluno_Respテーブルのデータ取得
-connection.query('SELECT * FROM Aluno_Resp;', (err, results) => {
+connection.query('SELECT * FROM responsavel_aluno;', (err, results) => {
   if (err) {
     console.error('Aluno_Respテーブルでエラー発生: ' + err)
   } else {
@@ -621,7 +539,7 @@ app.delete('/aluno_resps/:id_aluno/:id_resp', (req, res) => {
 
 // Notasのサーバー管理に関わる部分
 // Notasテーブルのデータ取得
-connection.query('SELECT * FROM Notas;', (err, results) => {
+connection.query('SELECT * FROM notas_faltas;', (err, results) => {
   if (err) {
     console.error('Notasテーブルでエラー発生: ' + err)
   } else {
@@ -704,67 +622,6 @@ app.delete('/notas/:id_notas', (req, res) => {
 
 
 
-// Turma_Alunoのサーバー管理に関わる部分
-// Turma_Alunoテーブルのデータ取得
-connection.query('SELECT * FROM Turma_Aluno;', (err, results) => {
-  if (err) {
-    console.error('Turma_Alunoテーブルでエラー発生: ' + err)
-  } else {
-    turmaAlunos = results
-  }
-})
-// リスト化
-app.get('/turma_alunos', (req, res) => {
-  res.json(turmaAlunos)
-})
-// 取得
-app.get('/turma_alunos/:id_aluno/:id_turma', (req, res) => {
-  const alunoID = parseInt(req.params.id_aluno)
-  const turmaID = parseInt(req.params.id_turma)
-  const turmaAluno = turmaAlunos.find((turmaAluno) => turmaAluno.id_aluno === alunoID && turmaAluno.id_turma === turmaID)
-  if (turmaAluno) {
-    res.json(turmaAluno)
-  } else {
-    res.status(404).json({ message: '見つかりません' })
-  }
-})
-// 追加
-app.post('/turma_alunos', (req, res) => {
-  const newTurmaAluno = req.body
-  connection.query(
-    'INSERT INTO Turma_Aluno (id_aluno, id_turma) VALUES (?, ?)',
-    [newTurmaAluno.id_aluno, newTurmaAluno.id_turma],
-    (err, result) => {
-      if (err) {
-        console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Turma_Alunoを追加できませんでした' })
-      } else {
-        /* newTurmaAluno.id_aluno = result.insertId */
-        turmaAlunos.push(newTurmaAluno)
-        res.status(201).json(newTurmaAluno)
-      }
-    }
-  )
-})
-// 削除
-app.delete('/turma_alunos/:id_aluno/:id_turma', (req, res) => {
-  const alunoID = parseInt(req.params.id_aluno)
-  const turmaID = parseInt(req.params.id_turma)
-  const index = turmaAlunos.findIndex(turmaAluno => turmaAluno.id_aluno === alunoID && turmaAluno.id_turma === turmaID)
-  if (index !== -1) {
-    connection.query('DELETE FROM Turma_Aluno WHERE id_aluno=? AND id_turma=?', [alunoID, turmaID], err => {
-      if (err) {
-        console.error('Turma_Alunoテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
-      } else {
-        const removedTurmaAluno = turmaAlunos.splice(index, 1)
-        res.json(removedTurmaAluno[0])
-      }
-    })
-  } else {
-    res.status(404).json({ message: '見つかりませんでした' })
-  }
-})
 
 
 
@@ -921,7 +778,7 @@ app.delete('/evento_alunos/:id_aluno/:id_evento', (req, res) => {
 
 // Disciplina_Alunoのサーバー管理に関わる部分
 // Disciplina_Alunoテーブルのデータ取得
-connection.query('SELECT * FROM Disciplina_Aluno;', (err, results) => {
+connection.query('SELECT * FROM aluno_disciplina;', (err, results) => {
   if (err) {
     console.error('Disciplina_Alunoテーブルでエラー発生: ' + err)
   } else {
@@ -1264,8 +1121,23 @@ app.post('/api/teste', (req, res) => {
   }
 
   // Consulta SQL para verificar as credenciais
-  const sql = `SELECT * FROM users WHERE email = ? AND password = ?`;
-  connection.query(sql, [email, password], (err, results) => {
+  let sql;
+  let params;
+
+  if (email.endsWith('@uscsonline.com.br')) {
+      // Verifica no banco de dados dos Alunos
+      sql = `SELECT * FROM Aluno WHERE email_aluno = ? AND senha = ?`;
+      params = [email, password];
+  } else if (email.endsWith('@outlook.com')) {
+      // Verifica no banco de dados dos Professores
+      sql = `SELECT * FROM Professor WHERE email_consti_prof = ? AND senha = ?`;
+      params = [email, password];
+  } else {
+      res.status(401).json({ success: false, message: 'Credenciais inválidas' });
+      return;
+  }
+
+  connection.query(sql, params, (err, results) => {
       if (err) {
           console.error('Erro ao executar consulta SQL:', err);
           res.status(500).json({ message: 'Erro interno do servidor' });
@@ -1282,9 +1154,6 @@ app.post('/api/teste', (req, res) => {
       }
   });
 });
-
-
-
 
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました / Servidor iniciado na porta ${port}`)

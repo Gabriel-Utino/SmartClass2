@@ -50,53 +50,56 @@
         }
 
         $(document).ready(function() {
-    const apiUrl = 'https://localhost:3000/api/teste'; // URL da sua API de login
+            const apiUrl = 'http://localhost:3000/api/teste'; // URL da sua API de login
 
-    $('#email, #password').keypress(function(event) {
-        if (event.which === 13) {
-            $('#login-button').click();
-        }
-    });
-
-    $('#login-button').click(function() {
-        const email = $('#email').val();
-        const password = $('#password').val();
-
-        if (!email || !password) {
-            $('#error-message').text('Por favor, preencha o email e a senha.').show();
-            $('#error-message-container').addClass('error-visible');
-            return;
-        }
-
-        $('#error-message').hide();
-        $('#loading-spinner').show();
-        $('#error-message-container').removeClass('error-visible');
-
-        $.ajax({
-            type: 'POST',
-            url: "http://localhost:3000/api/teste",
-            data: { email: email, password: password },
-            success: function(response) {
-                if (email.endsWith('@uscsonline.com.br')) {
-                    window.location.href = 'https://www.youtube.com';
-                } else if (email.endsWith('@outlook.com')) {
-                    window.location.href = 'https://www.google.com/maps';
-                } else {
-                    $('#error-message').text('Credenciais inválidas. Verifique seu email e senha.').show();
-                    $('#error-message-container').addClass('error-visible');
+            $('#email, #password').keypress(function(event) {
+                if (event.which === 13) {
+                    $('#login-button').click();
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Erro na requisição AJAX:', error);
-                $('#error-message').text('Ocorreu um erro ao tentar fazer login. Verifique seu email e senha.').show();
-                $('#error-message-container').addClass('error-visible');
-            },
-            complete: function() {
-                $('#loading-spinner').hide();
-            }
+            });
+
+            $('#login-button').click(function() {
+                const email = $('#email').val();
+                const password = $('#password').val();
+
+                if (!email || !password) {
+                    $('#error-message').text('Por favor, preencha o email e a senha.').show();
+                    $('#error-message-container').addClass('error-visible');
+                    return;
+                }
+
+                $('#error-message').hide();
+                $('#loading-spinner').show();
+                $('#error-message-container').removeClass('error-visible');
+
+                $.ajax({
+                    type: 'POST',
+                    url: apiUrl,
+                    data: JSON.stringify({ email: email, password: password }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        if (response.success) {
+                            if (email.endsWith('@uscsonline.com.br')) {
+                                window.location.href = 'https://www.youtube.com';
+                            } else if (email.endsWith('@outlook.com')) {
+                                window.location.href = 'https://www.google.com/maps';
+                            }
+                        } else {
+                            $('#error-message').text('Credenciais inválidas. Verifique seu email e senha.').show();
+                            $('#error-message-container').addClass('error-visible');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro na requisição AJAX:', error);
+                        $('#error-message').text('Ocorreu um erro ao tentar fazer login. Verifique seu email e senha.').show();
+                        $('#error-message-container').addClass('error-visible');
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                    }
+                });
+            });
         });
-    });
-});
     </script>
 </body>
 </html>
