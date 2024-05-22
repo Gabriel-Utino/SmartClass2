@@ -1,9 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql')
-const bodyParser = require('body-parser');
-const crypto = require('crypto'); // Importar módulo crypto para gerar token
-const nodemailer = require('nodemailer'); // Importar nodemailer para envio de email
+const bodyParser = require('body-parser')
+const crypto = require('crypto') // Importar módulo crypto para gerar token
+const nodemailer = require('nodemailer') // Importar nodemailer para envio de email
 
 //
 const app = express()
@@ -26,17 +26,16 @@ connection.connect(err => {
 })
 
 // Middleware para analisar corpos de requisição
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors()); // Habilitar CORS para permitir requisições de diferentes origens
-
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(cors()) // Habilitar CORS para permitir requisições de diferentes origens
 
 // 商品の配列をMySQLから読み込む
 let alunos = []
 let disciplinaAlunos = []
 let disciplinas = []
 let eventos = []
-let eventoAlunos =[]
+let eventoAlunos = []
 let eventoProfessors = []
 let notas = []
 let professores = []
@@ -46,13 +45,11 @@ let alunoResps = []
 let turmas = []
 let turmaDisciplinas = []
 
-
-
 // Professorのサーバー管理に関わる部分
-// Professorテーブルのデータ取得
+// ProfessorTableのデータ取得
 connection.query('SELECT * FROM Professor;', (err, results) => {
   if (err) {
-    console.error('Professorテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na ProfessorTable: ' + err)
   } else {
     professores = results
   }
@@ -68,7 +65,7 @@ app.get('/professores/:id_prof', (req, res) => {
   if (professor) {
     res.json(professor)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -90,7 +87,7 @@ app.post('/professores', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Professorを追加できませんでした' })
+        res.status(500).json({ message: 'Professor não foi possível adicionar' })
       } else {
         newProfessor.id_prof = result.insertId
         professores.push(newProfessor)
@@ -122,7 +119,7 @@ app.put('/professores/:id_prof', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Professorを更新できませんでした' })
+          res.status(500).json({ message: 'Professor não foi possível atualizar' })
         } else {
           professores[index] = { ...professores[index], ...updatedProfessor }
           res.json(professores[index])
@@ -130,7 +127,7 @@ app.put('/professores/:id_prof', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Professorが見つかりません' })
+    res.status(404).json({ message: 'Professor não encontrado' })
   }
 })
 // 削除
@@ -140,23 +137,23 @@ app.delete('/professores/:id_prof', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Professor WHERE id_prof=?', [id_prof], err => {
       if (err) {
-        console.error('Professorテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('ProfessorTable - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedProfessor = professores.splice(index, 1)
         res.json(removedProfessor[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // Turmaのサーバー管理に関わる部分
-// Turmaテーブルのデータ取得
+// TurmaTableのデータ取得
 connection.query('SELECT * FROM Turma;', (err, results) => {
   if (err) {
-    console.error('Turmaテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na Turma Table: ' + err)
   } else {
     turmas = results
   }
@@ -172,7 +169,7 @@ app.get('/turmas/:id_turma', (req, res) => {
   if (turma) {
     res.json(turma)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -184,7 +181,7 @@ app.post('/turmas', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Turmaを追加できませんでした' })
+        res.status(500).json({ message: 'Turma não foi possível adicionar' })
       } else {
         newTurma.id_turma = result.insertId
         turmas.push(newTurma)
@@ -205,7 +202,7 @@ app.put('/turmas/:id_turma', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Turmaを更新できませんでした' })
+          res.status(500).json({ message: 'Turma não foi possível atualizar' })
         } else {
           turmas[index] = { ...turmas[index], ...updatedTurma }
           res.json(turmas[index])
@@ -213,7 +210,7 @@ app.put('/turmas/:id_turma', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Turmaが見つかりません' })
+    res.status(404).json({ message: 'Turma não encontrado' })
   }
 })
 // 削除
@@ -223,23 +220,23 @@ app.delete('/turmas/:id_turma', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Turma WHERE id_turma=?', [id_turma], err => {
       if (err) {
-        console.error('Turmaテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('TurmaTable - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedTurma = turmas.splice(index, 1)
         res.json(removedTurma[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // Disciplinaのサーバー管理に関わる部分
-// Disciplinaテーブルのデータ取得
+// DisciplinaTableのデータ取得
 connection.query('SELECT * FROM Disciplina;', (err, results) => {
   if (err) {
-    console.error('Disciplinaテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na Disciplina Table: ' + err)
   } else {
     disciplinas = results
   }
@@ -255,7 +252,7 @@ app.get('/disciplinas/:id_disciplina', (req, res) => {
   if (disciplina) {
     res.json(disciplina)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -267,7 +264,7 @@ app.post('/disciplinas', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Disciplinaを追加できませんでした' })
+        res.status(500).json({ message: 'Disciplina não foi possível adicionar' })
       } else {
         newDisciplina.id_disciplina = result.insertId
         disciplinas.push(newDisciplina)
@@ -288,7 +285,7 @@ app.put('/disciplinas/:id_disciplina', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Disciplinaを更新できませんでした' })
+          res.status(500).json({ message: 'Disciplina não foi possível atualizar' })
         } else {
           disciplinas[index] = { ...disciplinas[index], ...updatedDisciplina }
           res.json(disciplinas[index])
@@ -296,7 +293,7 @@ app.put('/disciplinas/:id_disciplina', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Disciplinaが見つかりません' })
+    res.status(404).json({ message: 'Disciplina não encontrado' })
   }
 })
 // 削除
@@ -306,23 +303,23 @@ app.delete('/disciplinas/:id_disciplina', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Disciplina WHERE id_disciplina=?', [id_disciplina], err => {
       if (err) {
-        console.error('Disciplinaテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('DisciplinaTable - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedDisciplina = disciplinas.splice(index, 1)
         res.json(removedDisciplina[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // Responsavelのサーバー管理に関わる部分
-// Responsavelテーブルのデータ取得
+// ResponsavelTableのデータ取得
 connection.query('SELECT * FROM Responsavel;', (err, results) => {
   if (err) {
-    console.error('Responsavelテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na Responsavel Table: ' + err)
   } else {
     responsaveis = results
   }
@@ -338,7 +335,7 @@ app.get('/responsaveis/:id_resp', (req, res) => {
   if (responsavel) {
     res.json(responsavel)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -357,7 +354,7 @@ app.post('/responsaveis', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Responsavelを追加できませんでした' })
+        res.status(500).json({ message: 'Responsavel não foi possível adicionar' })
       } else {
         newResponsavel.id_resp = result.insertId
         responsaveis.push(newResponsavel)
@@ -386,7 +383,7 @@ app.put('/responsaveis/:id_resp', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Responsavelを更新できませんでした' })
+          res.status(500).json({ message: 'Responsavel não foi possível atualizar' })
         } else {
           responsaveis[index] = { ...responsaveis[index], ...updatedResponsavel }
           res.json(responsaveis[index])
@@ -394,7 +391,7 @@ app.put('/responsaveis/:id_resp', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Responsavelが見つかりません' })
+    res.status(404).json({ message: 'Responsavel não encontrado' })
   }
 })
 // 削除
@@ -404,23 +401,23 @@ app.delete('/responsaveis/:id_resp', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Responsavel WHERE id_resp=?', [id_resp], err => {
       if (err) {
-        console.error('Responsavelテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('ResponsavelTable - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedResponsavel = responsaveis.splice(index, 1)
         res.json(removedResponsavel[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // Alunoのサーバー管理に関わる部分
-// Alunoテーブルのデータ取得
+// AlunoTableのデータ取得
 connection.query('SELECT * FROM Aluno;', (err, results) => {
   if (err) {
-    console.error('Alunoテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na Aluno Table: ' + err)
   } else {
     alunos = results
   }
@@ -436,7 +433,7 @@ app.get('/alunos/:id_aluno', (req, res) => {
   if (aluno) {
     res.json(aluno)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -460,7 +457,7 @@ app.post('/alunos', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Alunoを追加できませんでした' })
+        res.status(500).json({ message: 'Aluno não foi possível adicionar' })
       } else {
         newAluno.id_aluno = result.insertId
         alunos.push(newAluno)
@@ -494,7 +491,7 @@ app.put('/alunos/:id_aluno', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Alunoを更新できませんでした' })
+          res.status(500).json({ message: 'Aluno não foi possível atualizar' })
         } else {
           alunos[index] = { ...alunos[index], ...updatedAluno }
           res.json(alunos[index])
@@ -502,7 +499,7 @@ app.put('/alunos/:id_aluno', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Alunoが見つかりません' })
+    res.status(404).json({ message: 'Aluno não encontrado' })
   }
 })
 // 削除
@@ -512,50 +509,48 @@ app.delete('/alunos/:id_aluno', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Aluno WHERE id_aluno=?', [id_aluno], err => {
       if (err) {
-        console.error('Alunoテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('AlunoTable - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedAluno = alunos.splice(index, 1)
         res.json(removedAluno[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
-// Alunoテーブルのdata_matriculaの最小値と最大値を取得するエンドポイント
+// AlunoTableのdata_matriculaの最小値と最大値を取得するエンドポイント
 app.get('/alunos/data_matricula_range', (req, res) => {
-  console.log('Received request for data matricula range'); // ログ追加
+  console.log('Received request for data matricula range') // ログ追加
   connection.query('SELECT MIN(data_matricula) as start, MAX(data_matricula) as end FROM Aluno', (err, results) => {
     if (err) {
-      console.error('Alunoテーブルでエラー発生: ' + err);
-      res.status(500).json({ message: 'エラーが発生しました' });
+      console.error('Ocorreu um erro na tabela Aluno: ' + err)
+      res.status(500).json({ message: 'Ocorreu um erro' })
     } else {
-      res.json(results[0]);
+      res.json(results[0])
     }
-  });
-});
+  })
+})
 // ターマに関連するアルノの取得
 app.get('/turmas/:id_turma/alunos', (req, res) => {
-  const turmaID = parseInt(req.params.id_turma);
+  const turmaID = parseInt(req.params.id_turma)
   // Turmaに関連するAlunoをデータベースからクエリして取得
   connection.query('SELECT * FROM Aluno WHERE id_turma = ?', [turmaID], (err, results) => {
     if (err) {
-      console.error('Turmaに関連するAlunoの取得中にエラーが発生しました: ' + err);
-      res.status(500).json({ message: 'Turmaに関連するAlunoを取得できませんでした' });
+      console.error('Ocorreu um erro ao recuperar Aluno relacionado a Turma: ' + err)
+      res.status(500).json({ message: 'Falha ao recuperar Aluno relacionado a Turma' })
     } else {
-      res.json(results);
+      res.json(results)
     }
-  });
-});
-
-
+  })
+})
 
 // Responsavel_Alunoのサーバー管理に関わる部分
-// Responsavel_Alunoテーブルのデータ取得
+// Responsavel_AlunoTableのデータ取得
 connection.query('SELECT * FROM responsavel_aluno;', (err, results) => {
   if (err) {
-    console.error('Aluno_Respテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela Aluno_Resp: ' + err)
   } else {
     alunoResps = results
   }
@@ -571,7 +566,7 @@ app.get('/resps_aluno/:id_resp_aluno', (req, res) => {
   if (alunoResp) {
     res.json(alunoResp)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -583,7 +578,7 @@ app.post('/resps_aluno', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Aluno_Respを追加できませんでした' })
+        res.status(500).json({ message: 'Falha ao adicionar Aluno_Resp' })
       } else {
         newAlunoResp.id_resp_aluno = result.insertId
         alunoResps.push(newAlunoResp)
@@ -599,24 +594,23 @@ app.delete('/resps_aluno/:id_resp_aluno', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Responsavel_Aluno WHERE id_resp_aluno=?', [id_resp_aluno], err => {
       if (err) {
-        console.error('Aluno_Respテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('Tabela Aluno_Resp - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedAlunoResp = alunoResps.splice(index, 1)
         res.json(removedAlunoResp[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
-
 // Notasのサーバー管理に関わる部分
-// Notasテーブルのデータ取得
+// NotasTableのデータ取得
 connection.query('SELECT * FROM Notas_faltas;', (err, results) => {
   if (err) {
-    console.error('Notasテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela Notas: ' + err)
   } else {
     notas = results
   }
@@ -627,12 +621,12 @@ app.get('/notas_faltas', (req, res) => {
 })
 // 取得
 app.get('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const notasID = parseInt(req.params.id_notas_faltas )
-  const nota = notas.find(nota => nota.id_notas_faltas  === notasID)
+  const notasID = parseInt(req.params.id_notas_faltas)
+  const nota = notas.find(nota => nota.id_notas_faltas === notasID)
   if (nota) {
     res.json(nota)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -654,7 +648,7 @@ app.post('/notas_faltas', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Notasを追加できませんでした' })
+        res.status(500).json({ message: 'Não foi possível adicionar notas' })
       } else {
         newNota.id_notas_faltas = result.insertId
         notas.push(newNota)
@@ -665,9 +659,9 @@ app.post('/notas_faltas', (req, res) => {
 })
 // 更新
 app.put('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const id_notas_faltas  = parseInt(req.params.id_notas_faltas )
+  const id_notas_faltas = parseInt(req.params.id_notas_faltas)
   const updatedNota = req.body
-  const index = notas.findIndex(nota => nota.id_notas_faltas  === id_notas_faltas )
+  const index = notas.findIndex(nota => nota.id_notas_faltas === id_notas_faltas)
   if (index !== -1) {
     connection.query(
       'UPDATE Notas_faltas SET id_disciplina=?, id_aluno=?, n1=?, AI=?, AP=?, faltas=?, academic_year=?, data_matricula=?, semestre=? WHERE id_notas_faltas=?',
@@ -686,7 +680,7 @@ app.put('/notas_faltas/:id_notas_faltas', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Notasを更新できませんでした' })
+          res.status(500).json({ message: 'Falha ao atualizar Notas' })
         } else {
           notas[index] = { ...notas[index], ...updatedNota }
           res.json(notas[index])
@@ -694,48 +688,46 @@ app.put('/notas_faltas/:id_notas_faltas', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Notasが見つかりません' })
+    res.status(404).json({ message: 'Notas não encontradas' })
   }
 })
 // 削除
 app.delete('/notas_faltas/:id_notas_faltas', (req, res) => {
-  const id_notas_faltas  = parseInt(req.params.id_notas)
-  const index = notas.findIndex(nota => nota.id_notas_faltas  === id_notas_faltas )
+  const id_notas_faltas = parseInt(req.params.id_notas)
+  const index = notas.findIndex(nota => nota.id_notas_faltas === id_notas_faltas)
   if (index !== -1) {
     connection.query('DELETE FROM Notas_faltas WHERE id_notas_faltas=?', [id_notas_faltas], err => {
       if (err) {
-        console.error('Notasテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('Tabela Notas - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedNota = notas.splice(index, 1)
         res.json(removedNota[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 生徒IDに関連する成績や欠席情報を取得するエンドポイントを追加
 app.get('/alunos/:id_aluno/notas_faltas', (req, res) => {
-  const id_aluno = parseInt(req.params.id_aluno);
+  const id_aluno = parseInt(req.params.id_aluno)
   // 生徒IDに関連する成績や欠席情報を取得するクエリを実行
   connection.query('SELECT * FROM Notas_faltas WHERE id_aluno = ?', [id_aluno], (err, results) => {
     if (err) {
-      console.error('Notasテーブルでエラー発生: ' + err);
-      res.status(500).json({ message: 'エラーが発生しました' });
+      console.error('Ocorreu erro na tabela Notas: ' + err)
+      res.status(500).json({ message: 'Ocorreu um erro' })
     } else {
-      res.json(results);
+      res.json(results)
     }
-  });
-});
-
-
+  })
+})
 
 // Eventoのサーバー管理に関わる部分
-// Eventoテーブルのデータ取得
+// EventoTableのデータ取得
 connection.query('SELECT * FROM Evento;', (err, results) => {
   if (err) {
-    console.error('Eventoテーブルでエラー発生: ' + err)
+    console.error('Ocorreu um erro na tabela Evento: ' + err)
   } else {
     eventos = results
   }
@@ -751,7 +743,7 @@ app.get('/eventos/:id_evento', (req, res) => {
   if (evento) {
     res.json(evento)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -763,7 +755,7 @@ app.post('/eventos', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Eventoを追加できませんでした' })
+        res.status(500).json({ message: 'Não foi possível adicionar Evento' })
       } else {
         newEvento.id_evento = result.insertId
         eventos.push(newEvento)
@@ -784,7 +776,7 @@ app.put('/eventos/:id_evento', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'Eventoを更新できませんでした' })
+          res.status(500).json({ message: 'Evento não pôde ser atualizado' })
         } else {
           eventos[index] = { ...eventos[index], ...updatedEvento }
           res.json(eventos[index])
@@ -792,7 +784,7 @@ app.put('/eventos/:id_evento', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Eventoが見つかりません' })
+    res.status(404).json({ message: 'Evento não encontrado' })
   }
 })
 // 削除
@@ -802,23 +794,23 @@ app.delete('/eventos/:id_evento', (req, res) => {
   if (index !== -1) {
     connection.query('DELETE FROM Evento WHERE id_evento=?', [id_evento], err => {
       if (err) {
-        console.error('Eventoテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('Tabela de eventos - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedEvento = eventos.splice(index, 1)
         res.json(removedEvento[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // evento_alunoのサーバー管理に関わる部分
-// evento_alunoテーブルのデータ取得
+// evento_alunoTableのデータ取得
 connection.query('SELECT * FROM evento_aluno;', (err, results) => {
   if (err) {
-    console.error('evento_alunoテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela evento_aluno: ' + err)
   } else {
     eventoAlunos = results
   }
@@ -830,13 +822,11 @@ app.get('/evento_alunos', (req, res) => {
 // 取得
 app.get('/evento_alunos/:id_evento_aluno', (req, res) => {
   const id_evento_alunoID = parseInt(req.params.id_evento_aluno)
-  const eventoAluno = eventoAlunos.find(
-    eventoAluno =>  eventoAluno.id_evento_aluno === id_evento_alunoID
-  )
+  const eventoAluno = eventoAlunos.find(eventoAluno => eventoAluno.id_evento_aluno === id_evento_alunoID)
   if (eventoAluno) {
     res.json(eventoAluno)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 // 追加
@@ -848,7 +838,7 @@ app.post('/evento_alunos', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'evento_alunoを追加できませんでした' })
+        res.status(500).json({ message: 'Não foi possível adicionar evento_aluno' })
       } else {
         newEventoAluno.id_evento_aluno = result.insertId
         eventoAlunos.push(newEventoAluno)
@@ -869,7 +859,7 @@ app.put('/eventos/:id_evento_aluno', (req, res) => {
       err => {
         if (err) {
           console.error('Error updating data in MySQL: ' + err)
-          res.status(500).json({ message: 'EventoAlunoを更新できませんでした' })
+          res.status(500).json({ message: 'Falha ao atualizar EventoAluno' })
         } else {
           eventoAlunos[index] = { ...eventoAlunos[index], ...updatedEventoAluno }
           res.json(eventoAlunos[index])
@@ -877,36 +867,33 @@ app.put('/eventos/:id_evento_aluno', (req, res) => {
       }
     )
   } else {
-    res.status(404).json({ message: 'Eventoが見つかりません' })
+    res.status(404).json({ message: 'Evento não encontrado' })
   }
 })
 // 削除
 app.delete('/evento_alunos/:id_evento_aluno', (req, res) => {
   const id_evento_aluno = parseInt(req.params.id_evento_aluno)
-  const index = eventoAlunos.findIndex(
-    eventoAluno => eventoAluno.id_evento_aluno === id_evento_aluno
-  )
+  const index = eventoAlunos.findIndex(eventoAluno => eventoAluno.id_evento_aluno === id_evento_aluno)
   if (index !== -1) {
     connection.query('DELETE FROM evento_aluno WHERE id_evento_aluno=?', [id_evento_aluno], err => {
       if (err) {
-        console.error('evento_alunoテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('Tabela evento_aluno - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedEventoAluno = eventoAlunos.splice(index, 1)
         res.json(removedEventoAluno[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
-
 // Disciplina_Alunoのサーバー管理に関わる部分
-// Disciplina_Alunoテーブルのデータ取得
+// Disciplina_AlunoTableのデータ取得
 connection.query('SELECT * FROM Aluno_disciplina;', (err, results) => {
   if (err) {
-    console.error('Disciplina_Alunoテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela Disciplina_Aluno: ' + err)
   } else {
     disciplinaAlunos = results
   }
@@ -918,13 +905,11 @@ app.get('/Aluno_disciplina', (req, res) => {
 // 取得
 app.get('/Aluno_disciplina/:id_aluno_disc', (req, res) => {
   const id_aluno_discID = parseInt(req.params.id_aluno_disc)
-  const disciplinaAluno = disciplinaAlunos.find(
-    disciplinaAluno => disciplinaAluno.id_aluno_disc === id_aluno_discID
-  )
+  const disciplinaAluno = disciplinaAlunos.find(disciplinaAluno => disciplinaAluno.id_aluno_disc === id_aluno_discID)
   if (disciplinaAluno) {
     res.json(disciplinaAluno)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não encontrado' })
   }
 })
 // 追加
@@ -936,7 +921,7 @@ app.post('/Aluno_disciplina', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'Disciplina_Alunoを追加できませんでした' })
+        res.status(500).json({ message: 'Falha ao adicionar Disciplina_Aluno' })
       } else {
         newDisciplinaAluno.id_aluno_disc = result.insertId
         disciplinaAlunos.push(newDisciplinaAluno)
@@ -948,33 +933,27 @@ app.post('/Aluno_disciplina', (req, res) => {
 // 削除
 app.delete('/Aluno_disciplina/:id_aluno_disc', (req, res) => {
   const id_aluno_discID = parseInt(req.params.id_aluno_disc)
-  const index = disciplinaAlunos.findIndex(
-    disciplinaAluno => disciplinaAluno.id_aluno_disc === id_aluno_discID
-  )
+  const index = disciplinaAlunos.findIndex(disciplinaAluno => disciplinaAluno.id_aluno_disc === id_aluno_discID)
   if (index !== -1) {
-    connection.query(
-      'DELETE FROM Aluno_disciplina WHERE id_aluno_disc=?',
-      [id_aluno_discID],
-      err => {
-        if (err) {
-          console.error('Aluno_disciplinaテーブル - MySQLからのデータ削除エラー: ' + err)
-          res.status(500).json({ message: '削除できませんでした' })
-        } else {
-          const removedDisciplinaAluno = disciplinaAlunos.splice(index, 1)
-          res.json(removedDisciplinaAluno[0])
-        }
+    connection.query('DELETE FROM Aluno_disciplina WHERE id_aluno_disc=?', [id_aluno_discID], err => {
+      if (err) {
+        console.error('Tabela Aluno_disciplina – Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
+      } else {
+        const removedDisciplinaAluno = disciplinaAlunos.splice(index, 1)
+        res.json(removedDisciplinaAluno[0])
       }
-    )
+    })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // evento_professorのサーバー管理に関わる部分
-// evento_professorテーブルのデータ取得
+// evento_professorTableのデータ取得
 connection.query('SELECT * FROM evento_professor;', (err, results) => {
   if (err) {
-    console.error('evento_professorテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela evento_professor: ' + err)
   } else {
     eventoProfessors = results
   }
@@ -986,13 +965,11 @@ app.get('/evento_professors', (req, res) => {
 // 取得
 app.get('/evento_professors/:id_evento_prof', (req, res) => {
   const id_evento_profID = parseInt(req.params.id_evento_prof)
-  const eventoProfessor = eventoProfessors.find(
-    eventoProfessor =>  eventoProfessor.id_evento_prof === id_evento_profID
-  )
+  const eventoProfessor = eventoProfessors.find(eventoProfessor => eventoProfessor.id_evento_prof === id_evento_profID)
   if (eventoProfessor) {
     res.json(eventoProfessor)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não encontrado' })
   }
 })
 // 追加
@@ -1004,7 +981,7 @@ app.post('/evento_professors', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'evento_professorを追加できませんでした' })
+        res.status(500).json({ message: 'Não foi possível adicionar evento_professor' })
       } else {
         newEventoProfessor.id_evento_prof = result.insertId
         eventoProfessors.push(newEventoProfessor)
@@ -1016,31 +993,29 @@ app.post('/evento_professors', (req, res) => {
 // 削除
 app.delete('/evento_professors/:id_evento_prof', (req, res) => {
   const id_evento_profID = parseInt(req.params.id_evento_prof)
-  const index = eventoProfessors.findIndex(
-    eventoProfessor => eventoProfessor.id_evento_prof === id_evento_profID
-  )
+  const index = eventoProfessors.findIndex(eventoProfessor => eventoProfessor.id_evento_prof === id_evento_profID)
   if (index !== -1) {
     connection.query('DELETE FROM evento_professor WHERE id_evento_prof=?', [id_evento_profID], err => {
       if (err) {
-        console.error('evento_professorテーブル - MySQLからのデータ削除エラー: ' + err)
-        res.status(500).json({ message: '削除できませんでした' })
+        console.error('Tabela evento_professor - Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
       } else {
         const removedEventoProfessor = eventoProfessors.splice(index, 1)
         res.json(removedEventoProfessor[0])
       }
     })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
 // turma_disciplinaのサーバー管理に関わる部分
-// turma_disciplinaテーブルのデータ取得
+// turma_disciplinaTableのデータ取得
 connection.query('SELECT * FROM turma_disciplina;', (err, results) => {
   if (err) {
-    console.error('turma_disciplinaテーブルでエラー発生: ' + err)
+    console.error('Ocorreu erro na tabela turma_disciplina: ' + err)
   } else {
-    turmaDisciplinas = results;
+    turmaDisciplinas = results
   }
 })
 // リスト化
@@ -1050,13 +1025,11 @@ app.get('/turma_disciplinas', (req, res) => {
 // 取得
 app.get('/turma_disciplinas/:id_turma_disc', (req, res) => {
   const id_turma_discID = parseInt(req.params.id_turma_disc)
-  const turmaDisciplina = turmaDisciplinas.find(
-    turmaDisciplina => turmaDisciplina.id_turma_disc === id_turma_discID
-  )
+  const turmaDisciplina = turmaDisciplinas.find(turmaDisciplina => turmaDisciplina.id_turma_disc === id_turma_discID)
   if (turmaDisciplina) {
     res.json(turmaDisciplina)
   } else {
-    res.status(404).json({ message: '見つかりません' })
+    res.status(404).json({ message: 'Não encontrado' })
   }
 })
 // 追加
@@ -1068,7 +1041,7 @@ app.post('/turma_disciplinas', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
-        res.status(500).json({ message: 'turma_disciplinaを追加できませんでした' })
+        res.status(500).json({ message: 'Falha ao adicionar turma_disciplina' })
       } else {
         newTurmaDisciplina.id_turma_disc = result.insertId
         turmaDisciplinas.push(newTurmaDisciplina)
@@ -1080,177 +1053,147 @@ app.post('/turma_disciplinas', (req, res) => {
 // 削除
 app.delete('/turma_disciplinas/:id_turma_disc', (req, res) => {
   const id_turma_discID = parseInt(req.params.id_turma_disc)
-  const index = turmaDisciplinas.findIndex(
-    turmaDisciplina => turmaDisciplina.id_turma_disc === id_turma_discID
-  )
+  const index = turmaDisciplinas.findIndex(turmaDisciplina => turmaDisciplina.id_turma_disc === id_turma_discID)
   if (index !== -1) {
-    connection.query(
-      'DELETE FROM turma_disciplina WHERE id_turma_disc=?',
-      [id_turma_discID],
-      err => {
-        if (err) {
-          console.error('turma_disciplinaテーブル - MySQLからのデータ削除エラー: ' + err)
-          res.status(500).json({ message: '削除できませんでした' })
-        } else {
-          const removedTurmaDisciplina = turmaDisciplinas.splice(index, 1)
-          res.json(removedTurmaDisciplina[0])
-        }
+    connection.query('DELETE FROM turma_disciplina WHERE id_turma_disc=?', [id_turma_discID], err => {
+      if (err) {
+        console.error('Tabela turma_disciplina – Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
+      } else {
+        const removedTurmaDisciplina = turmaDisciplinas.splice(index, 1)
+        res.json(removedTurmaDisciplina[0])
       }
-    )
+    })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' })
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
 })
 
-
 // prof_disciplinaのサーバー管理に関わる部分
-// prof_disciplinaテーブルのデータ取得
+// prof_disciplinaTableのデータ取得
 connection.query('SELECT * FROM prof_disciplina;', (err, results) => {
   if (err) {
-    console.error('prof_disciplinaテーブルでエラーが発生しました: ' + err);
+    console.error('Ocorreu um erro na tabela prof_disciplina: ' + err)
   } else {
-    profDisciplinas = results;
+    profDisciplinas = results
   }
-});
+})
 // リスト化
 app.get('/prof_disciplinas', (req, res) => {
-  res.json(profDisciplinas);
-});
+  res.json(profDisciplinas)
+})
 // 取得
 app.get('/prof_disciplinas/:id_prof_disc', (req, res) => {
-  const id_prof_discID = parseInt(req.params.id_prof_disc);
-  const profDisciplina = profDisciplinas.find(
-    profDisciplina => profDisciplina.id_prof_disc === id_prof_discID
-  );
+  const id_prof_discID = parseInt(req.params.id_prof_disc)
+  const profDisciplina = profDisciplinas.find(profDisciplina => profDisciplina.id_prof_disc === id_prof_discID)
   if (profDisciplina) {
-    res.json(profDisciplina);
+    res.json(profDisciplina)
   } else {
-    res.status(404).json({ message: '見つかりません' });
+    res.status(404).json({ message: 'Não encontrado' })
   }
-});
+})
 // 追加
 app.post('/prof_disciplinas', (req, res) => {
-  const newProfDisciplina = req.body;
+  const newProfDisciplina = req.body
   connection.query(
     'INSERT INTO prof_disciplina (id_prof, id_disciplina) VALUES (?, ?)',
     [newProfDisciplina.id_prof, newProfDisciplina.id_disciplina],
     (err, result) => {
       if (err) {
-        console.error('MySQLにデータを追加する際にエラーが発生しました: ' + err);
-        res.status(500).json({ message: 'prof_disciplinaを追加できませんでした' });
+        console.error('Ocorreu um erro ao adicionar dados ao MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível adicionar prof_disciplina' })
       } else {
-        newProfDisciplina.id_prof_disc = result.insertId;
-        profDisciplinas.push(newProfDisciplina);
-        res.status(201).json(newProfDisciplina);
+        newProfDisciplina.id_prof_disc = result.insertId
+        profDisciplinas.push(newProfDisciplina)
+        res.status(201).json(newProfDisciplina)
       }
     }
-  );
-});
+  )
+})
 // 削除
 app.delete('/prof_disciplinas/:id_prof_disc', (req, res) => {
-  const id_prof_discID = parseInt(req.params.id_prof_disc);
-  const index = profDisciplinas.findIndex(
-    profDisciplina => profDisciplina.id_prof_disc === id_prof_discID
-  );
+  const id_prof_discID = parseInt(req.params.id_prof_disc)
+  const index = profDisciplinas.findIndex(profDisciplina => profDisciplina.id_prof_disc === id_prof_discID)
   if (index !== -1) {
-    connection.query(
-      'DELETE FROM prof_disciplina WHERE id_prof_disc=?',
-      [id_prof_discID],
-      err => {
-        if (err) {
-          console.error('prof_disciplinaテーブル - MySQLからのデータ削除エラー: ' + err);
-          res.status(500).json({ message: '削除できませんでした' });
-        } else {
-          const removedProfDisciplina = profDisciplinas.splice(index, 1);
-          res.json(removedProfDisciplina[0]);
-        }
+    connection.query('DELETE FROM prof_disciplina WHERE id_prof_disc=?', [id_prof_discID], err => {
+      if (err) {
+        console.error('tabela prof_disciplina – Erro ao excluir dados do MySQL: ' + err)
+        res.status(500).json({ message: 'Não foi possível excluir' })
+      } else {
+        const removedProfDisciplina = profDisciplinas.splice(index, 1)
+        res.json(removedProfDisciplina[0])
       }
-    );
+    })
   } else {
-    res.status(404).json({ message: '見つかりませんでした' });
+    res.status(404).json({ message: 'Não foi possível localizar' })
   }
-});
-
-
-
-
-
-
-
-
-
-
-
+})
 
 // orgDisciTurmaで使用
 // 選択されたTurmaのDisciplinaを取得
 app.get('/turmas/:id_turma/disciplinas', (req, res) => {
-  const id_turma = parseInt(req.params.id_turma);
+  const id_turma = parseInt(req.params.id_turma)
   connection.query(
     'SELECT d.id_disciplina, d.disciplina FROM Disciplina d INNER JOIN Turma_Disciplina td ON d.id_disciplina = td.id_disciplina WHERE td.id_turma = ?',
     [id_turma],
     (err, results) => {
       if (err) {
-        console.error('Error fetching Disciplinas:', err);
-        res.status(500).json({ message: 'Disciplinasの取得に失敗しました' });
+        console.error('Error fetching Disciplinas:', err)
+        res.status(500).json({ message: 'Falha ao obter Disciplinas' })
       } else {
-        res.json(results);
+        res.json(results)
       }
     }
-  );
-});
+  )
+})
 // 選択されたTurmaのAlunoと複数のDisciplinaの間にNotas_faltasエントリを作成
 app.post('/assign-disciplinas', (req, res) => {
-  const { id_turma, id_disciplinas, academic_year, semestre } = req.body;
+  const { id_turma, id_disciplinas, academic_year, semestre } = req.body
 
   // Turmaに所属する全てのAlunoを取得
   connection.query('SELECT id_aluno FROM Aluno WHERE id_turma = ?', [id_turma], (err, alunos) => {
     if (err) {
-      console.error('Error fetching Alunos:', err);
-      res.status(500).json({ message: 'Alunoの取得に失敗しました' });
-      return;
+      console.error('Error fetching Alunos:', err)
+      res.status(500).json({ message: 'Falha ao obter Aluno' })
+      return
     }
 
-    // Notas_faltasエントリを作成
-    const data_matricula = new Date().toISOString().slice(0, 10);
+    // Notas_faltas criar
+    const data_matricula = new Date().toISOString().slice(0, 10)
 
     id_disciplinas.forEach(id_disciplina => {
       alunos.forEach(aluno => {
         connection.query(
           'INSERT INTO Notas_faltas (id_disciplina, id_aluno, academic_year, data_matricula, semestre) VALUES (?, ?, ?, ?, ?)',
           [id_disciplina, aluno.id_aluno, academic_year, data_matricula, semestre],
-          (err) => {
+          err => {
             if (err) {
-              console.error('Error creating Notas_faltas entry:', err);
+              console.error('Error creating Notas_faltas entry:', err)
             }
           }
-        );
-      });
-    });
+        )
+      })
+    })
 
-    res.json({ message: 'Aplicado' });
-  });
-});
+    res.json({ message: 'Aplicado' })
+  })
+})
 
-
-
-
-
-// apricar faltasの適応するために
-// 全てのTurmaを取得
+//para adaptar apricar faltas
+//Pegue toda Turma
 app.get('/turmasFaltas', (req, res) => {
   connection.query('SELECT * FROM Turma;', (err, results) => {
     if (err) {
-      console.error('Turmaテーブルでエラー発生: ' + err);
-      res.status(500).json({ message: 'Turmaを取得できませんでした' });
+      console.error('Ocorreu erro na tabela Turma: ' + err)
+      res.status(500).json({ message: 'Não foi possível obter Turma' })
     } else {
-      res.json(results);
+      res.json(results)
     }
-  });
-});
-// 指定されたTurmaに関連するDisciplinasを取得
+  })
+})
+// Obtenha Disciplinas relacionadas à Turma especificada
 app.get('/turma_disciplinas/:id_turma/disciplinas', (req, res) => {
-  const id_turma = parseInt(req.params.id_turma);
+  const id_turma = parseInt(req.params.id_turma)
   connection.query(
     `SELECT d.id_disciplina, d.disciplina 
      FROM Turma_Disciplina td 
@@ -1259,17 +1202,17 @@ app.get('/turma_disciplinas/:id_turma/disciplinas', (req, res) => {
     [id_turma],
     (err, results) => {
       if (err) {
-        console.error('Turma_Disciplinaテーブルでエラー発生: ' + err);
-        res.status(500).json({ message: 'Disciplinaを取得できませんでした' });
+        console.error('Ocorreu erro na tabela Turma_Disciplina: ' + err)
+        res.status(500).json({ message: 'Não foi possível obter Disciplina' })
       } else {
-        res.json(results);
+        res.json(results)
       }
     }
-  );
-});
-// notas_faltasテーブルの検索
+  )
+})
+// notas_faltas Tabela de pesquisa
 app.get('/notas_faltasApri', (req, res) => {
-  const { turmaId, disciplinaId, year, semestre } = req.query;
+  const { turmaId, disciplinaId, year, semestre } = req.query
   connection.query(
     `SELECT nf.id_notas_faltas, nf.faltas, nf.N1, nf.AI, nf.AP, nf.id_aluno, a.nome_aluno, a.foto
      FROM Notas_faltas nf
@@ -1278,211 +1221,188 @@ app.get('/notas_faltasApri', (req, res) => {
     [disciplinaId, turmaId, year, semestre],
     (err, results) => {
       if (err) {
-        console.error('Error fetching notas_faltas:', err);
-        res.status(500).json({ message: '検索できませんでした' });
+        console.error('Error fetching notas_faltas:', err)
+        res.status(500).json({ message: 'Erro na pesquisa' })
       } else {
-        res.json(results);
+        res.json(results)
       }
     }
-  );
-});
-// faltasを更新
+  )
+})
+// faltas atualizar
 app.put('/notas_faltasApri/faltas', (req, res) => {
-  const { ids } = req.body;
-  const placeholders = ids.map(() => '?').join(',');
+  const { ids } = req.body
+  const placeholders = ids.map(() => '?').join(',')
   connection.query(
     `UPDATE Notas_faltas SET faltas = faltas + 1 WHERE id_notas_faltas IN (${placeholders})`,
     ids,
     (err, results) => {
       if (err) {
-        console.error('Error updating faltas:', err);
-        console.log("エラー内容：" + err)
-        res.status(500).json({ success: false, message: '更新できませんでした' });
+        console.error('Error updating faltas:', err)
+        console.log('Conteúdo do erro:' + err)
+        res.status(500).json({ success: false, message: 'Não foi possível atualizar' })
       } else {
-        res.json({ success: true, message: 'Faltas foi apricada' });
+        res.json({ success: true, message: 'Faltas foi apricada' })
       }
     }
-  );
-});
-
-
-
-
-
-
+  )
+})
 
 ///////////////////////////ENVIO DE EMAIL///////////////////////
 
 // Rota para verificar se o email está cadastrado no banco de dados
 app.post('/verificarEmail', (req, res) => {
-  const { email } = req.body;
-  const sql = 'SELECT * FROM users WHERE email = ?';
+  const { email } = req.body
+  const sql = 'SELECT * FROM users WHERE email = ?'
   connection.query(sql, [email], (err, results) => {
-      if (err) {
-          console.error('Erro ao consultar email no banco de dados:', err);
-          res.status(500).json({ message: 'Erro interno do servidor' });
-          return;
-      }
+    if (err) {
+      console.error('Erro ao consultar email no banco de dados:', err)
+      res.status(500).json({ message: 'Erro interno do servidor' })
+      return
+    }
 
-      console.log('Resultados da consulta:', results); // Exibe os resultados da consulta
+    console.log('Resultados da consulta:', results) // Exibe os resultados da consulta
 
-      // Verificar se o email foi encontrado no banco de dados
-      if (results.length > 0) {
-          // Email encontrado
-          res.json({ message: 'Email cadastrado' });
-      } else {
-          // Email não encontrado
-          res.status(404).json({ message: 'Email não encontrado' });
-      }
-  });
-});
+    // Verificar se o email foi encontrado no banco de dados
+    if (results.length > 0) {
+      // Email encontrado
+      res.json({ message: 'Email cadastrado' })
+    } else {
+      // Email não encontrado
+      res.status(404).json({ message: 'Email não encontrado' })
+    }
+  })
+})
 // Rota para enviar o email de redefinição de senha
 app.post('/enviarEmailRedefinicao', (req, res) => {
-  const { email } = req.body;
+  const { email } = req.body
 
   const transporter = nodemailer.createTransport({
-      service: 'Gmail', // Provedor de email (exemplo: Gmail)
-      auth: {
-          user: 'teste.pim.uscs@gmail.com', // Seu email
-          pass: 'ozpykegrfsynjaxs' // Sua senha do email
-      }
-  });
+    service: 'Gmail', // Provedor de email (exemplo: Gmail)
+    auth: {
+      user: 'teste.pim.uscs@gmail.com', // Seu email
+      pass: 'ozpykegrfsynjaxs' // Sua senha do email
+    }
+  })
   // Consultar o ID do usuário pelo email
-  const sqlGetUserId = 'SELECT id FROM users WHERE email = ?';
+  const sqlGetUserId = 'SELECT id FROM users WHERE email = ?'
   connection.query(sqlGetUserId, [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao consultar ID do usuário no banco de dados:', err)
+      res.status(500).json({ message: 'Erro interno do servidor' })
+      return
+    }
+    if (results.length === 0) {
+      // Usuário com o email fornecido não encontrado
+      res.status(404).json({ message: 'Usuário não encontrado com o email fornecido' })
+      return
+    }
+    const userId = results[0].id
+    // Gerar token único
+    const token = crypto.randomBytes(20).toString('hex') // Token hexadecimal de 40 caracteres
+    // Definir data de expiração para 30 minutos a partir de agora
+    const expiresAt = new Date()
+    expiresAt.setMinutes(expiresAt.getMinutes() + 30)
+    // Inserir o token no banco de dados
+    const sqlInsertToken = 'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)'
+    connection.query(sqlInsertToken, [userId, token, expiresAt], (err, insertResult) => {
       if (err) {
-          console.error('Erro ao consultar ID do usuário no banco de dados:', err);
-          res.status(500).json({ message: 'Erro interno do servidor' });
-          return;
+        console.error('Erro ao inserir token no banco de dados:', err)
+        res.status(500).send('Erro ao enviar o email de redefinição.')
+        return
       }
-      if (results.length === 0) {
-          // Usuário com o email fornecido não encontrado
-          res.status(404).json({ message: 'Usuário não encontrado com o email fornecido' });
-          return;
-      }
-      const userId = results[0].id;
-      // Gerar token único
-      const token = crypto.randomBytes(20).toString('hex'); // Token hexadecimal de 40 caracteres
-      // Definir data de expiração para 30 minutos a partir de agora
-      const expiresAt = new Date();
-      expiresAt.setMinutes(expiresAt.getMinutes() + 30);
-      // Inserir o token no banco de dados
-      const sqlInsertToken = 'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)';
-      connection.query(sqlInsertToken, [userId, token, expiresAt], (err, insertResult) => {
-          if (err) {
-              console.error('Erro ao inserir token no banco de dados:', err);
-              res.status(500).send('Erro ao enviar o email de redefinição.');
-              return;
-          }
-          // URL da página HTML para redefinir a senha com o token
-          const resetPasswordURL = `http://127.0.0.1:5500/reset-password/reset-password.html?token=${token}`;
+      // URL da página HTML para redefinir a senha com o token
+      const resetPasswordURL = `http://127.0.0.1:5500/reset-password/reset-password.html?token=${token}`
 
-          const mailOptions = {
-              from: 'teste.pim.uscs@gmail.com',
-              to: email,
-              subject: 'Redefinição de Senha',
-              html: `
+      const mailOptions = {
+        from: 'teste.pim.uscs@gmail.com',
+        to: email,
+        subject: 'Redefinição de Senha',
+        html: `
               <p>Você solicitou a redefinição de senha. Clique no link abaixo para redefinir sua senha:</p>
               <p><a href="${resetPasswordURL}">Redefinir Senha</a></p>
           `
-          };
-          // Enviar o email de redefinição de senha
-          transporter.sendMail(mailOptions, function(error, info) {
-              if (error) {
-                  console.error('Erro ao enviar o email de redefinição:', error);
-                  res.status(500).send('Erro ao enviar o email de redefinição.');
-              } else {
-                  console.log('Email enviado:', info.response);
-                  res.status(200).send('Email enviado com sucesso.');
-              }
-          });
-      });
-  });
-});
+      }
+      // Enviar o email de redefinição de senha
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.error('Erro ao enviar o email de redefinição:', error)
+          res.status(500).send('Erro ao enviar o email de redefinição.')
+        } else {
+          console.log('Email enviado:', info.response)
+          res.status(200).send('Email enviado com sucesso.')
+        }
+      })
+    })
+  })
+})
 // Rota para redefinir a senha
 app.post('/redefinirSenha', (req, res) => {
-  const { token, newPassword } = req.body;
+  const { token, newPassword } = req.body
 
   // Consultar o token no banco de dados
-  const sqlSelectToken = 'SELECT * FROM password_reset_tokens WHERE token = ? AND expires_at > NOW()';
+  const sqlSelectToken = 'SELECT * FROM password_reset_tokens WHERE token = ? AND expires_at > NOW()'
   connection.query(sqlSelectToken, [token], (err, results) => {
-      if (err) {
-          console.error('Erro ao consultar token no banco de dados:', err);
-          res.status(500).json({ message: 'Erro interno do servidor' });
-          return;
-      }
+    if (err) {
+      console.error('Erro ao consultar token no banco de dados:', err)
+      res.status(500).json({ message: 'Erro interno do servidor' })
+      return
+    }
 
-      if (results.length === 0) {
-          // Token inválido ou expirado
-          res.status(400).json({ message: 'Token inválido ou expirado' });
-          return;
+    if (results.length === 0) {
+      // Token inválido ou expirado
+      res.status(400).json({ message: 'Token inválido ou expirado' })
+      return
+    }
+    const tokenInfo = results[0]
+    const userId = tokenInfo.user_id
+    // Atualizar a senha do usuário
+    const sqlUpdatePassword = 'UPDATE users SET password = ? WHERE id = ?'
+    connection.query(sqlUpdatePassword, [newPassword, userId], (err, updateResult) => {
+      if (err) {
+        console.error('Erro ao atualizar a senha no banco de dados:', err)
+        res.status(500).json({ message: 'Erro interno do servidor' })
+        return
       }
-      const tokenInfo = results[0];
-      const userId = tokenInfo.user_id;
-      // Atualizar a senha do usuário
-      const sqlUpdatePassword = 'UPDATE users SET password = ? WHERE id = ?';
-      connection.query(sqlUpdatePassword, [newPassword, userId], (err, updateResult) => {
-          if (err) {
-              console.error('Erro ao atualizar a senha no banco de dados:', err);
-              res.status(500).json({ message: 'Erro interno do servidor' });
-              return;
-          }
-          // Remover o token do banco de dados após usar
-          const sqlDeleteToken = 'DELETE FROM password_reset_tokens WHERE id = ?';
-          connection.query(sqlDeleteToken, [tokenInfo.id], (err, deleteResult) => {
-              if (err) {
-                  console.error('Erro ao excluir o token do banco de dados:', err);
-              }
-          });
-          res.status(200).json({ message: 'Senha redefinida com sucesso' });
-      });
-  });
-});
+      // Remover o token do banco de dados após usar
+      const sqlDeleteToken = 'DELETE FROM password_reset_tokens WHERE id = ?'
+      connection.query(sqlDeleteToken, [tokenInfo.id], (err, deleteResult) => {
+        if (err) {
+          console.error('Erro ao excluir o token do banco de dados:', err)
+        }
+      })
+      res.status(200).json({ message: 'Senha redefinida com sucesso' })
+    })
+  })
+})
 /////////////////////////LOGIN//////////////////////////////////
 // Rota para autenticação de login
 app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
   // Verifica se email e senha foram fornecidos
   if (!email || !password) {
-      res.status(400).json({ message: 'Email e senha são obrigatórios' });
-      return;
+    res.status(400).json({ message: 'Email e senha são obrigatórios' })
+    return
   }
   // Consulta SQL para verificar as credenciais
-  const sql = `SELECT * FROM users WHERE email = ? AND password = ?`;
+  const sql = `SELECT * FROM users WHERE email = ? AND password = ?`
   connection.query(sql, [email, password], (err, results) => {
-      if (err) {
-          console.error('Erro ao executar consulta SQL:', err);
-          res.status(500).json({ message: 'Erro interno do servidor' });
-          return;
-      }
-      // Verifica se encontrou um usuário com as credenciais fornecidas
-      if (results.length > 0) {
-          // Se as credenciais forem válidas, envia uma resposta de sucesso
-          res.status(200).json({ success: true });
-      } else {
-          // Se as credenciais forem inválidas, envia uma resposta indicando isso
-          res.status(401).json({ success: false, message: 'Credenciais inválidas' });
-      }
-  });
-});
-
-
-
-
-
-
-
-
-
-
-
-
+    if (err) {
+      console.error('Erro ao executar consulta SQL:', err)
+      res.status(500).json({ message: 'Erro interno do servidor' })
+      return
+    }
+    // Verifica se encontrou um usuário com as credenciais fornecidas
+    if (results.length > 0) {
+      // Se as credenciais forem válidas, envia uma resposta de sucesso
+      res.status(200).json({ success: true })
+    } else {
+      // Se as credenciais forem inválidas, envia uma resposta indicando isso
+      res.status(401).json({ success: false, message: 'Credenciais inválidas' })
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました / Servidor iniciado na porta ${port}`)
 })
-
-
-
-
-
