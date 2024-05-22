@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calendario</title>
+  <title>Home</title>
   <!-- 追加：外部のスタイルシート -->
   <!-- <link rel="stylesheet" href="styles/professores.css" /> -->
   <!-- <link rel="stylesheet" href="styles/style.css" /> -->
@@ -15,6 +15,18 @@
   <!-- Bootstrap Datepicker CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
     rel="stylesheet">
+  <style>
+    .icon-container {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .icon-container img {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -86,16 +98,41 @@
 
 
 
+
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
   <div class="container">
     <div class="row">
-      <div class="col">
-        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FSao_Paulo&bgcolor=%23A79B8E&showTitle=0&src=Z2FicmllbC51dGlub0B1c2Nzb25saW5lLmNvbS5icg&src=Y19jbGFzc3Jvb20wOWFlMjE4MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zYjJiYzliY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kOWE5ZDhiMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zY2UxN2NhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb20zNWI1MmU3ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb201MGQ4ZDRmMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21jYTU4NWVjM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb201NGEzOWI1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%23c26401&color=%230047a8&color=%23137333&color=%23202124&color=%230B8043&color=%23202124&color=%230047a8&color=%23007b83&color=%230047a8&color=%2333B679" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <h1 class="text-center">Bem-vindo</h1>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center  rounded bg-body-secondary">
+      <div class="col-5 icon-container">
+        <a href="dadosResp.html">
+          <img src="../../icons/iconB.png" alt="Icon">
+        </a>
+        <p>Dados Cadastrais</p>
+      </div>
+      <div class="col-5 icon-container">
+        <a href="Calendario.html">
+          <img src="../../icons/calendarB.png" alt="Calendar Icon">
+        </a>
+        <p>Calendar</p>
+      </div>
+      <div class="col-5 icon-container">
+        <a href="visualizarNotas.html">
+          <img src="../../icons/noteB.png" alt="Note Icon">
+        </a>
+        <p>Visualizar Notas do aluno</p>
+      </div>
+      <div class="col-5 icon-container">
+        <a href="visualizarFaltas.html">
+          <img src="../../icons/apricarFaltas.png" alt="Faltas Icon">
+        </a>
+        <p>Visualizar Faltas do aluno</p>
       </div>
     </div>
   </div>
-
-
 
 
 
@@ -110,6 +147,7 @@
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
+    
 </body>
 
 </html>

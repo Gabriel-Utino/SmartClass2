@@ -75,7 +75,7 @@ app.get('/professores/:id_prof', (req, res) => {
 app.post('/professores', (req, res) => {
   const newProfessor = req.body
   connection.query(
-    'INSERT INTO Professor (nome_prof, cpf_prof, telefone_prof, email_consti_prof, email_prof, nascimento_prof, endereco_prof, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO Professor (nome_prof, cpf_prof, telefone_prof, email_consti_prof, email_prof, nascimento_prof, endereco_prof, senha, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
       newProfessor.nome_prof,
       newProfessor.cpf_prof,
@@ -84,7 +84,8 @@ app.post('/professores', (req, res) => {
       newProfessor.email_prof,
       newProfessor.nascimento_prof,
       newProfessor.endereco_prof,
-      newProfessor.senha
+      newProfessor.senha,
+      newProfessor.level
     ],
     (err, result) => {
       if (err) {
@@ -105,7 +106,7 @@ app.put('/professores/:id_prof', (req, res) => {
   const index = professores.findIndex(professor => professor.id_prof === id_prof)
   if (index !== -1) {
     connection.query(
-      'UPDATE Professor SET nome_prof=?, cpf_prof=?, telefone_prof=?, email_consti_prof=?, email_prof=?, nascimento_prof=?, endereco_prof=?, senha=? WHERE id_prof=?',
+      'UPDATE Professor SET nome_prof=?, cpf_prof=?, telefone_prof=?, email_consti_prof=?, email_prof=?, nascimento_prof=?, endereco_prof=?, senha=?, level=? WHERE id_prof=?',
       [
         updatedProfessor.nome_prof,
         updatedProfessor.cpf_prof,
@@ -115,6 +116,7 @@ app.put('/professores/:id_prof', (req, res) => {
         updatedProfessor.nascimento_prof,
         updatedProfessor.endereco_prof,
         updatedProfessor.senha,
+        updatedProfessor.level,
         id_prof
       ],
       err => {
